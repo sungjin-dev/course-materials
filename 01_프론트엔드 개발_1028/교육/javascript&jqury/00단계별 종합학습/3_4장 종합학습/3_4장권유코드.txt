@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>제어문 & 객체 통합 실습</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; text-align: center; padding-top: 50px; }
+        .result { font-weight: bold; color: blue; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+
+    <h1> 행운의 경품 추첨 </h1>
+
+    <script>
+        // 1. prompt와 조건문(if) 활용
+        var userName = prompt("당신의 이름을 입력하세요.", "");
+        if (userName == "" || userName == null) {
+            userName = "방문자";
+        }
+
+        // 2. Date 객체 활용
+        var today = new Date();
+        var nowYear = today.getFullYear();
+        var nowMonth = today.getMonth() + 1; // 월은 0부터 시작하므로 +1
+        var nowDate = today.getDate();
+
+        document.write("<h3>안녕하세요, " + userName + "님!</h3>");
+        document.write("<p>오늘은 " + nowYear + "년 " + nowMonth + "월 " + nowDate + "일입니다.</p>");
+        document.write("<hr>");
+
+        // 3. 배열(Array) 객체 활용
+        var giftList = ["MacBook Air", "iPad Pro", "에어팟 프로", "스타벅스 커피", "다음 기회에..."];
+
+        // 4. 반복문(for) 활용 - 추첨 과정 출력
+        document.write("<p><strong>추첨 시스템 가동:</strong> ");
+        for (var i = 1; i <= 3; i++) {
+            document.write(i + "... ");
+        }
+        document.write("완료!</p>");
+
+        // 5. 수학(Math) 객체 활용 - 랜덤 인덱스 추출
+        // 0부터 (배열길이-1) 사이의 난수 생성
+        var luckyNum = Math.floor(Math.random() * giftList.length);
+        var resultGift = giftList[luckyNum];
+
+        // 결과 출력 (조건문으로 꽝인지 아닌지 구분)
+        if (luckyNum === 4) {
+            document.write("<p class='result'>아쉽네요! 결과는 [" + resultGift + "] 입니다. 😢</p>");
+        } else {
+            document.write("<p class='result'>축하합니다! 당첨 경품은 [" + resultGift + "] 입니다! 🎉</p>");
+        }
+
+        document.write("<hr>");
+
+        // 6. 브라우저 객체(BOM) 활용 - location
+        document.write("<p style='color:gray; font-size:12px;'>현재 접속 주소: " + location.href + "</p>");
+    </script>
+
+</body>
+</html>

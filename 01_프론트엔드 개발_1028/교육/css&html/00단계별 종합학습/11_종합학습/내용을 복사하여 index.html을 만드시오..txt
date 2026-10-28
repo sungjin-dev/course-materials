@@ -1,0 +1,40 @@
+<div id="wrapper">
+    <header>
+        <h1>Cloud Drive</h1>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html">홈</a></li>
+                <li><a href="project-guide.html">프로젝트 가이드</a></li>
+                <li><a href="security-notice.pdf">보안 지침(PDF)</a></li>
+                <li><a href="archive-all.zip">전체 백업(ZIP)</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="content">
+        <section class="board">
+            <h2>최근 업데이트 문서</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>파일명</th>
+                        <th>작성자</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="urgent"><td>2026_기획안_최종.docx</td><td>김철수</td><td>승인대기</td></tr>
+                    <tr><td>디자인_시안_v1.png</td><td>이영희</td><td>진행중</td></tr>
+                    <tr class="urgent"><td>서버_점검_리포트.pdf</td><td>박팀장</td><td>완료</td></tr>
+                    <tr><td>분기_실적_보고서.xlsx</td><td>최대리</td><td>진행중</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="info-box">
+            <h3>시스템 공지</h3>
+            <p>모든 문서는 <strong>암호화</strong>되어 저장됩니다.</p>
+            <p title="internal-only-msg">외부 유출 시 법적 책임을 물을 수 있습니다.</p>
+        </div>
+    </main>
+</div>

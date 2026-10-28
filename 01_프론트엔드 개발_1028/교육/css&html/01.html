@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01. HTML 기본기 다지기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP & RESET */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: #020617; 
+            display: grid;
+            gap: 20px;
+            place-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* 2. SLIDE CONTAINER */
+        .slide-container {
+            align-items: flex-start;
+            background: radial-gradient(circle at 80% 20%, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            width: 1280px;
+            overflow: hidden;
+            padding: 50px 60px;
+            position: relative;
+        }
+
+        /* Background Grid */
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-container > * { position: relative; z-index: 1; width: 100%; }
+
+        /* 3. TYPOGRAPHY */
+        h1, h2, h3 { font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #f8fafc; font-weight: 700; }
+        p, li { color: #94a3b8; font-weight: 400; line-height: 1.6; font-size: 17px; }
+        
+        .slide-title { font-size: 40px; margin-bottom: 25px; border-bottom: 2px solid #1e293b; padding-bottom: 12px; }
+        .slide-title span { color: #38bdf8; font-family: 'Fira Code', monospace; font-size: 32px; font-weight: 500; }
+        
+        /* 4. LAYOUTS */
+        .content-area { display: flex; flex-grow: 1; width: 100%; height: calc(100% - 85px); }
+        .code-layout { display: grid; grid-template-columns: 1.8fr 1fr; gap: 30px; width: 100%; height: 100%; }
+
+        /* 5. CODE BLOCK STYLING (Optimized for One Tag Per Line) */
+        .code-box {
+            background-color: #0b1120;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            border-left: 4px solid #38bdf8;
+            padding: 30px;
+            font-family: 'Fira Code', monospace;
+            font-size: 19px;
+            line-height: 1.5;
+            color: #e2e8f0;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        /* 커스텀 스크롤바 */
+        .code-box::-webkit-scrollbar { width: 8px; }
+        .code-box::-webkit-scrollbar-track { background: #0b1120; }
+        .code-box::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        .code-box::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+        .line { display: flex; align-items: center; min-height: 28px; white-space: pre; }
+        .indent-1 { padding-left: 2rem; }
+        .indent-2 { padding-left: 4rem; }
+        .indent-3 { padding-left: 6rem; }
+        .indent-4 { padding-left: 8rem; }
+        .indent-5 { padding-left: 10rem; }
+
+        .code-box .tag { color: #38bdf8; }
+        .code-box .attr { color: #a78bfa; }
+        .code-box .val { color: #a3e635; }
+        .code-box .cmt { color: #64748b; font-style: italic; }
+
+        /* 6. TEXT COLUMN STYLING */
+        .text-column { display: flex; flex-direction: column; gap: 20px; justify-content: center;}
+        .text-box { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .text-box h3 { font-size: 20px; color: #f8fafc; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .text-box h3 i { color: #38bdf8; }
+        
+        .bullet-list { list-style: none; padding: 0; margin: 0; }
+        .bullet-list li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 16px; }
+        .bullet-list li::before { content: '>'; position: absolute; left: 0; color: #38bdf8; font-family: 'Fira Code', monospace; font-weight: bold; }
+        .bullet-list li strong { color: #f8fafc; }
+
+        /* TITLE SLIDE SPECIFIC */
+        .bleed-image-layout { padding: 0; grid-template-columns: 1.1fr 0.9fr; align-items: center; display: grid; }
+        .bleed-text-side { padding: 60px; }
+        .bleed-text-side h1 { font-size: 64px; line-height: 1.2; margin-bottom: 20px; }
+        .bleed-text-side h1 span { color: #38bdf8; }
+        .bleed-text-side p { font-size: 24px; color: #cbd5e1; }
+        .bleed-image-side { height: 720px; width: 100%; border-radius: 0 12px 12px 0; border-left: 1px solid #1e293b; display: block; }
+        .index-list { margin-top: 40px; display: flex; flex-direction: column; gap: 15px; }
+        .index-item { background: rgba(15, 23, 42, 0.6); padding: 15px 25px; border-radius: 8px; border: 1px solid #334155; font-size: 20px; color: #e2e8f0; font-weight: 500; }
+        .index-item span { color: #38bdf8; font-weight: 700; margin-right: 15px; }
+
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title Slide (Bleed Image Right) -->
+<div class="slide-container bleed-image-layout" id="slide1">
+    <div class="bleed-text-side">
+        <h1>01. <span>HTML 기본기 다지기</span></h1>
+        <p>HTML 첫 만남부터 기본 문서 구조까지</p>
+        
+        <div class="index-list">
+            <div class="index-item"><span>01-1</span> HTML과의 첫 만남</div>
+            <div class="index-item"><span>01-2</span> 웹 브라우저와 웹 편집기</div>
+            <div class="index-item"><span>01-3</span> HTML 문서 기본 구조</div>
+            <div class="index-item"><span>01-4</span> 웹 문서 만들고 업로드하기</div>
+        </div>
+    </div>
+    <div class="image-container">
+        <!-- 외부 이미지 대신 직접 그린 고화질 SVG 그래픽 사용 -->
+        <svg class="bleed-image-side" viewBox="0 0 600 720" xmlns="http://www.w3.org/2000/svg">
+            <!-- 배경 -->
+            <rect width="600" height="720" fill="#0f172a" />
+            <defs>
+                <!-- 격자 무늬 패턴 -->
+                <pattern id="gridPattern" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#1e293b" stroke-width="1"/>
+                </pattern>
+                <!-- 네온 빛 효과 -->
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <rect width="600" height="720" fill="url(#gridPattern)" />
+            
+            <!-- 그라데이션 및 은은한 조명 효과 -->
+            <circle cx="100" cy="150" r="250" fill="#38bdf8" opacity="0.12" style="filter: blur(50px);" />
+            <circle cx="500" cy="600" r="300" fill="#a78bfa" opacity="0.1" style="filter: blur(60px);" />
+            
+            <!-- 중앙 코딩 기호 아트 -->
+            <text x="50%" y="45%" fill="#38bdf8" font-size="130" font-family="'Fira Code', monospace" font-weight="700" text-anchor="middle" filter="url(#glow)">&lt; / &gt;</text>
+            <text x="50%" y="60%" fill="#a3e635" font-size="36" font-family="'Fira Code', monospace" font-weight="500" text-anchor="middle" opacity="0.8">{ HTML5_Basics }</text>
+        </svg>
+    </div>
+</div>
+
+<!-- Slide 2: HTML 첫 만남 -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">01-1. HTML과의 첫 만남 <span>Tag & Web Standard</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">&lt;!-- 기본 HTML 문서 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">!doctype</span> <span class="attr">html</span>&gt;</div>
+                <div class="line">&lt;<span class="tag">html</span> <span class="attr">lang</span>=<span class="val">"ko"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">head</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">meta</span> <span class="attr">charset</span>=<span class="val">"utf-8"</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">title</span>&gt;</div>
+                <div class="line indent-3">기본 HTML 문서</div>
+                <div class="line indent-2">&lt;/<span class="tag">title</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">head</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">body</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">h1</span>&gt;</div>
+                <div class="line indent-3">시간이란..</div>
+                <div class="line indent-2">&lt;/<span class="tag">h1</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">p</span>&gt;</div>
+                <div class="line indent-3">내일 죽을 것처럼 오늘을 살고..</div>
+                <div class="line indent-2">&lt;/<span class="tag">p</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">body</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">html</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-code"></i> HTML이란?</h3>
+                    <ul class="bullet-list">
+                        <li>웹에서 자유롭게 오갈 수 있는 <strong>웹 문서를 만드는 언어</strong>.</li>
+                        <li>모든 문서는 <strong>*.html</strong> (또는 *.htm) 확장자로 저장.</li>
+                        <li>꺽쇠 괄호(<code>&lt; &gt;</code>)로 묶인 <strong>태그(tag)</strong>를 사용하여 이미지, 텍스트, 링크 등을 화면에 표시합니다.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-globe"></i> 웹 표준</h3>
+                    <ul class="bullet-list">
+                        <li>웹 사이트를 만들 때 지켜야 하는 <strong>약속들을 정리한 것</strong>입니다.</li>
+                        <li>표준을 지키면 어떤 브라우저에서도 동일하게 보입니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: 문서 형식과 html 태그 -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">01-3. HTML 문서 기본 구조 (1) <span>&lt;!DOCTYPE&gt;, &lt;html&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">&lt;!-- 1. 문서 유형 지정 (HTML5 기준) --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">!DOCTYPE</span> <span class="attr">html</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- 2. HTML 문서의 시작 (언어 설정) --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">html</span> <span class="attr">lang</span>=<span class="val">"ko"</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line indent-1"><span class="cmt">&lt;!-- 여기에 head와 body가 들어갑니다 --&gt;</span></div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- 3. HTML 문서의 끝 --&gt;</span></div>
+                <div class="line">&lt;/<span class="tag">html</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-file-code"></i> &lt;!DOCTYPE html&gt;</h3>
+                    <ul class="bullet-list">
+                        <li>웹 브라우저에게 현재 문서가 <strong>어떤 버전의 HTML</strong>로 작성되었는지 알려주는 역할을 합니다.</li>
+                        <li>위의 코드는 최신 표준인 <strong>HTML5</strong> 문서임을 명시합니다. (<code>&lt;!doctype html&gt;</code>과 동일)</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-brands fa-html5"></i> &lt;html&gt;</h3>
+                    <ul class="bullet-list">
+                        <li>실제 문서 정보와 내용이 시작되고 끝나는 것을 표시하는 <strong>문서의 뿌리(Root) 태그</strong>입니다.</li>
+                        <li><strong>lang 속성:</strong> <code>lang="ko"</code>를 사용하여 해당 문서에서 사용할 기본 언어를 지정할 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: 문서 정보 헤드 영역 -->
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">01-3. HTML 문서 기본 구조 (2) <span>&lt;head&gt;, &lt;title&gt;, &lt;meta&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">head</span>&gt;</div>
+                <div class="line indent-1"><span class="cmt">&lt;!-- 브라우저 탭에 표시될 제목 --&gt;</span></div>
+                <div class="line indent-1">&lt;<span class="tag">title</span>&gt;</div>
+                <div class="line indent-2">문서 제목 표시줄 내용</div>
+                <div class="line indent-1">&lt;/<span class="tag">title</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line indent-1"><span class="cmt">&lt;!-- 문자 인코딩 설정 --&gt;</span></div>
+                <div class="line indent-1">&lt;<span class="tag">meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line indent-1"><span class="cmt">&lt;!-- 모바일 화면 배율 설정 --&gt;</span></div>
+                <div class="line indent-1">&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span></div>
+                <div class="line indent-3"><span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line indent-1"><span class="cmt">&lt;!-- 검색 엔진을 위한 정보 --&gt;</span></div>
+                <div class="line indent-1">&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="val">"keywords"</span> <span class="attr">content</span>=<span class="val">"html5, 웹표준"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="val">"author"</span> <span class="attr">content</span>=<span class="val">"Kyunghee Ko"</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">head</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-head-side-mask"></i> &lt;head&gt; 영역의 특징</h3>
+                    <ul class="bullet-list">
+                        <li>웹 브라우저 <strong>화면에는 보이지 않지만</strong>, 브라우저가 알아야 할 정보나 문서에 사용할 외부 파일(CSS, JS 등)을 링크하는 곳입니다.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-tags"></i> 주요 내부 태그</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;title&gt;:</strong> 브라우저의 <strong>제목 표시줄(탭)</strong>에 표시됩니다.</li>
+                        <li><strong>&lt;meta&gt;:</strong> 인코딩(한글 깨짐 방지), 스마트폰을 위한 뷰포트(viewport), 키워드, 문서 요약, 작성자 정보 등을 지정합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: 문서 본문 바디 영역 -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">01-3. HTML 문서 기본 구조 (3) <span>&lt;body&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">body</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line indent-1"><span class="cmt">&lt;!-- 브라우저 화면에 렌더링될 실제 내용 --&gt;</span></div>
+                <div class="line indent-1">&lt;<span class="tag">h1</span>&gt;</div>
+                <div class="line indent-2">실제 화면에 표시되는 제목</div>
+                <div class="line indent-1">&lt;/<span class="tag">h1</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line indent-1">&lt;<span class="tag">p</span>&gt;</div>
+                <div class="line indent-2">텍스트, 이미지, 목록, 표 등</div>
+                <div class="line indent-2">사용자가 화면을 통해 보게 되는</div>
+                <div class="line indent-2">대부분의 태그가 이곳에 위치합니다.</div>
+                <div class="line indent-1">&lt;/<span class="tag">p</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line">&lt;/<span class="tag">body</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-file-lines"></i> 문서의 몸통 &lt;body&gt;</h3>
+                    <ul class="bullet-list">
+                        <li>실제로 사용자가 <strong>웹 브라우저 화면에서 보게 될 내용</strong>을 입력하는 핵심 공간입니다.</li>
+                        <li>이전 문서(02. 텍스트 관련 태그 등)에서 배웠던 대부분의 표시용 태그들이 모두 이 <code>&lt;body&gt;</code>와 <code>&lt;/body&gt;</code> 태그 사이에 들어갑니다.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-cubes"></i> 포함할 수 있는 요소</h3>
+                    <ul class="bullet-list">
+                        <li><strong>텍스트:</strong> 제목(hn), 단락(p) 등</li>
+                        <li><strong>미디어:</strong> 이미지(img), 비디오(video)</li>
+                        <li><strong>구조화:</strong> 목록(ul, ol), 표(table), 폼(form)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

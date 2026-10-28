@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS 종합 실습 - 제품 상세 페이지</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="product-card">
+        <header class="card-header">
+            <span class="badge">NEW</span>
+        </header>
+
+        <section class="card-body">
+            <div class="product-info">
+                <h2>프로패셔널 게이밍 키보드</h2>
+                <p>최상의 타건감과 정밀한 반응 속도를 제공하는 전문가용 키보드입니다. 모든 키에 RGB 백라이트가 적용되어 있습니다.</p>
+            </div>
+            
+            <aside class="product-specs">
+                <h3>주요 사양</h3>
+                <table>
+                    <tr>
+                        <th>연결 방식</th>
+                        <td class="align-middle">유선/무선 겸용</td>
+                    </tr>
+                    <tr>
+                        <th>스위치</th>
+                        <td class="align-middle">기계식 적축</td>
+                    </tr>
+                </table>
+            </aside>
+        </section>
+        
+        <footer class="card-footer">
+            <button>지금 구매하기</button>
+        </footer>
+    </div>
+</body>
+</html>

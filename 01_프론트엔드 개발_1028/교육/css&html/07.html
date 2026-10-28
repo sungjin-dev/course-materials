@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Color & Background Masterclass</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Poppins:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP & RESET */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: #020617; 
+            display: grid;
+            gap: 40px;
+            place-items: center;
+            min-height: 100vh;
+            padding: 40px 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* 2. SLIDE CONTAINER */
+        .slide-container {
+            align-items: flex-start;
+            background: radial-gradient(circle at 80% 20%, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            width: 1280px;
+            overflow: hidden;
+            padding: 50px 60px;
+            position: relative;
+        }
+
+        /* Background Grid */
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-container > * { position: relative; z-index: 1; width: 100%; }
+
+        /* 3. TYPOGRAPHY */
+        h1, h2, h3 { font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #f8fafc; font-weight: 700; }
+        p, li { color: #94a3b8; font-weight: 400; line-height: 1.6; font-size: 17px; }
+        
+        .slide-title { font-size: 36px; margin-bottom: 25px; border-bottom: 2px solid #1e293b; padding-bottom: 12px; }
+        .slide-title span { color: #38bdf8; font-family: 'Fira Code', monospace; font-size: 28px; font-weight: 500; }
+        
+        /* 4. LAYOUTS */
+        .content-area { display: flex; flex-grow: 1; width: 100%; height: calc(100% - 85px); }
+        .code-layout { display: grid; grid-template-columns: 1.8fr 1fr; gap: 30px; width: 100%; height: 100%; }
+
+        /* 5. CODE BLOCK STYLING */
+        .code-box {
+            background-color: #0b1120;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            border-left: 4px solid #38bdf8;
+            padding: 25px;
+            font-family: 'Fira Code', monospace;
+            font-size: 17px;
+            line-height: 1.5;
+            color: #e2e8f0;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            height: 100%;
+        }
+        
+        .code-box::-webkit-scrollbar { width: 8px; }
+        .code-box::-webkit-scrollbar-track { background: #0b1120; }
+        .code-box::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+
+        .line { display: flex; align-items: center; min-height: 26px; white-space: pre; }
+        .indent-1 { padding-left: 2rem; }
+        .indent-2 { padding-left: 4rem; }
+
+        .code-box .tag { color: #38bdf8; } 
+        .code-box .attr { color: #a78bfa; } 
+        .code-box .val { color: #a3e635; } 
+        .code-box .cmt { color: #64748b; font-style: italic; }
+        .code-box .html-tag { color: #f472b6; }
+
+        /* 6. TEXT COLUMN STYLING */
+        .text-column { display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; }
+        .text-box { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .text-box h3 { font-size: 18px; color: #f8fafc; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .text-box h3 i { color: #38bdf8; }
+        
+        .bullet-list { list-style: none; padding: 0; margin: 0; }
+        .bullet-list li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 15px; }
+        .bullet-list li::before { content: '>'; position: absolute; left: 0; color: #38bdf8; font-family: 'Fira Code', monospace; font-weight: bold; }
+        .bullet-list li strong { color: #f8fafc; }
+
+        /* TITLE SLIDE SPECIFIC */
+        .bleed-image-layout { padding: 0; grid-template-columns: 1.1fr 0.9fr; align-items: center; display: grid; height: 100%; }
+        .bleed-text-side { padding: 60px; }
+        .bleed-text-side h1 { font-size: 64px; line-height: 1.2; margin-bottom: 20px; }
+        .bleed-text-side h1 span { color: #38bdf8; }
+        .bleed-text-side p { font-size: 24px; color: #cbd5e1; }
+        .bleed-image-side { 
+            height: 720px; width: 100%; border-radius: 0 12px 12px 0; 
+            border-left: 1px solid #1e293b; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* VISUAL PREVIEW */
+        .preview-rect { width: 100%; height: 50px; border-radius: 6px; margin-top: 10px; border: 1px solid #334155; }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide-container" style="padding:0;">
+    <div class="bleed-image-layout">
+        <div class="bleed-text-side">
+            <h1>07. CSS 색상과<br><span>배경 스타일</span></h1>
+            <p>구조(HTML)와 디자인(CSS)의 연동</p>
+            <div style="margin-top: 40px;">
+                <p style="color: #38bdf8; font-weight: bold;">[수업 내용]</p>
+                <p style="font-size: 18px;">- HTML 요소에 색상 적용하기<br>- 배경 이미지 위치와 고정 기술<br>- CSS만으로 만드는 화려한 패턴</p>
+            </div>
+        </div>
+        <div class="bleed-image-side">
+            <i class="fa-solid fa-layer-group" style="font-size: 180px; color: rgba(56, 189, 248, 0.1);"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Color Notations (Page 2-3) -->
+<div class="slide-container">
+    <h2 class="slide-title"><span>07-1</span> 색상 표기법과 적용 구조</h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">/* CSS 스타일 정의 */</span></div>
+                <div class="line"><span class="tag">.text-hex</span> { <span class="attr">color</span>: <span class="val">#38bdf8</span>; }</div>
+                <div class="line"><span class="tag">.bg-rgba</span> { <span class="attr">background</span>: <span class="tag">rgba</span>(<span class="val">56, 189, 248, 0.2</span>); }</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;p</span> <span class="attr">class</span>=<span class="val">"text-hex"</span><span class="html-tag">&gt;</span>16진수 색상 텍스트<span class="html-tag">&lt;/p&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"bg-rgba"</span><span class="html-tag">&gt;</span>투명도가 적용된 배경 박스<span class="html-tag">&lt;/div&gt;</span></div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">/* 실무 Tip: HSL을 이용한 버튼 강조 */</span></div>
+                <div class="line"><span class="tag">.btn</span> { <span class="attr">background</span>: <span class="tag">hsl</span>(<span class="val">200, 100%, 50%</span>); }</div>
+                <div class="line"><span class="tag">.btn:hover</span> { <span class="attr">background</span>: <span class="tag">hsl</span>(<span class="val">200, 100%, 40%</span>); }</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-code"></i> HTML과 CSS 연결</h3>
+                    <ul class="bullet-list">
+                        <li><strong>선택자:</strong> HTML의 <code>class</code>와 CSS의 <code>.</code> 기호를 연결합니다.</li>
+                        <li><strong>rgba:</strong> 투명 배경 요소는 내부 텍스트에 영향을 주지 않고 배경만 조절할 때 사용합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Background Position & Attachment (Page 9-11) -->
+<div class="slide-container">
+    <h2 class="slide-title"><span>07-2</span> 배경 이미지 제어와 HTML 구조</h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">/* CSS: 메인 히어로 섹션 설정 */</span></div>
+                <div class="line"><span class="tag">.hero</span> {</div>
+                <div class="line indent-1"><span class="attr">height</span>: <span class="val">500px</span>;</div>
+                <div class="line indent-1"><span class="attr">background-image</span>: <span class="tag">url</span>(<span class="val">'sky.jpg'</span>);</div>
+                <div class="line indent-1"><span class="attr">background-position</span>: <span class="val">center</span>;</div>
+                <div class="line indent-1"><span class="attr">background-attachment</span>: <span class="val">fixed</span>;</div>
+                <div class="line">}</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML: 섹션 구성 --&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;section</span> <span class="attr">class</span>=<span class="val">"hero"</span><span class="html-tag">&gt;</span></div>
+                <div class="line indent-1"><span class="html-tag">&lt;h1&gt;</span>패럴랙스 배경 효과<span class="html-tag">&lt;/h1&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;/section&gt;</span></div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-scroll"></i> 화면 고정 기법</h3>
+                    <ul class="bullet-list">
+                        <li><strong>Fixed:</strong> 스크롤 시 배경 이미지는 움직이지 않고 콘텐츠만 이동합니다.</li>
+                        <li><strong>Center:</strong> 반응형 웹에서 핵심 피사체를 가운데 유지시킵니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Background Origin & Clip (Page 5, 14) -->
+<div class="slide-container">
+    <h2 class="slide-title"><span>07-2</span> 배경 적용 범위 실습 예제</h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">/* CSS: 테두리와 배경의 기점 관계 */</span></div>
+                <div class="line"><span class="tag">.box</span> {</div>
+                <div class="line indent-1"><span class="attr">width</span>: <span class="val">200px</span>; <span class="attr">padding</span>: <span class="val">20px</span>;</div>
+                <div class="line indent-1"><span class="attr">border</span>: <span class="val">10px dashed white</span>;</div>
+                <div class="line indent-1"><span class="attr">background-image</span>: <span class="tag">url</span>(<span class="val">'pattern.png'</span>);</div>
+                <div class="line indent-1"><span class="attr">background-origin</span>: <span class="val">content-box</span>;</div>
+                <div class="line">}</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML: 콘텐츠 박스 --&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"box"</span><span class="html-tag">&gt;</span>내용 영역에서 이미지가 시작됨<span class="html-tag">&lt;/div&gt;</span></div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-object-group"></i> Box Model 연동</h3>
+                    <ul class="bullet-list">
+                        <li><strong>Content-box:</strong> 텍스트가 시작되는 안쪽 영역부터 배경 이미지가 배치됩니다.</li>
+                        <li><strong>Dashed Border:</strong> 테두리 틈새로 배경이 보이는지 여부는 <code>clip</code> 속성으로 제어합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Advanced Gradients (Page 20-27) -->
+<div class="slide-container">
+    <h2 class="slide-title"><span>07-3</span> 그러데이션 패턴 코드 예제</h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">/* CSS: 반복 선형 그러데이션 패턴 */</span></div>
+                <div class="line"><span class="tag">.stripe-pattern</span> {</div>
+                <div class="line indent-1"><span class="attr">width</span>: <span class="val">100%</span>; <span class="attr">height</span>: <span class="val">100px</span>;</div>
+                <div class="line indent-1"><span class="attr">background</span>: <span class="tag">repeating-linear-gradient</span>(</div>
+                <div class="line indent-2"><span class="val">45deg,</span></div>
+                <div class="line indent-2"><span class="val">#38bdf8, #38bdf8 10px,</span></div>
+                <div class="line indent-2"><span class="val">#020617 10px, #020617 20px</span></div>
+                <div class="line indent-1">);</div>
+                <div class="line">}</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML: 패턴을 채울 요소 --&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"stripe-pattern"</span><span class="html-tag">&gt;&lt;/div&gt;</span></div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-shapes"></i> 패턴 디자인</h3>
+                    <div class="preview-rect" style="background: repeating-linear-gradient(45deg, #38bdf8, #38bdf8 10px, #0f172a 10px, #0f172a 20px);"></div>
+                    <ul class="bullet-list" style="margin-top: 15px;">
+                        <li><strong>Hard-stop:</strong> 10px 지점에서 색상을 급격히 변경하여 선명한 줄무늬를 만듭니다.</li>
+                        <li><strong>Angle:</strong> <code>45deg</code>를 통해 사선 무늬를 구현했습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Background Shorthand (Summary) -->
+<div class="slide-container">
+    <h2 class="slide-title"><span>07-2</span> 배경 속성 축약형 적용</h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">/* CSS: 모든 배경 설정을 한 줄로 */</span></div>
+                <div class="line"><span class="tag">.card-bg</span> {</div>
+                <div class="line indent-1"><span class="attr">background</span>: <span class="val">#0b1120 url('logo.svg') no-repeat center / contain</span>;</div>
+                <div class="line">}</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML: 카드 컴포넌트 --&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"card-bg"</span><span class="html-tag">&gt;</span></div>
+                <div class="line indent-1"><span class="html-tag">&lt;p&gt;</span>배경 정보가 축약 적용됨<span class="html-tag">&lt;/p&gt;</span></div>
+                <div class="line"><span class="html-tag">&lt;/div&gt;</span></div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-compress"></i> 축약형 문법</h3>
+                    <ul class="bullet-list">
+                        <li><strong>/ :</strong> 위치(position)와 크기(size) 사이에는 반드시 슬래시를 넣어야 합니다.</li>
+                        <li><strong>우선순위:</strong> 축약형은 개별 속성(color, image 등)보다 나중에 선언되면 모든 개별 설정을 덮어씁니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

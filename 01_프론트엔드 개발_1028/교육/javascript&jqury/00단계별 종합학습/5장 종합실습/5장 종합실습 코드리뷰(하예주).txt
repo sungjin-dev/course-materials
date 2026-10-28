@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바스크립트 함수 종합 실습</title>
+    <style>
+        /*id가 copyBtn인 요소의 스타일 적용*/
+        #copyBtn {
+            padding: 10px 20px;             /*상하 10px 좌우 20px*/
+            background-color: #4CAF50;    /*배경색*/
+            color: white;                 /*글자색*/
+            border: none;                   /*테두리*/
+            border-radius: 5px;             /*테두리 라운드*/
+            cursor: pointer;                /*버튼에 마우스 올릴 경우 커서모양*/
+            margin-bottom: 20px;            /*아래쪽 객체와의 거리*/
+        }
+
+        /*버튼에 마우스 올릴 경우 배경색 변경*/
+        #copyBtn:hover { background-color: #45a049; }
+    </style>
+</head>
+
+<body>
+    <!--버튼 클릭 시, copyCode함수 수행-->
+    <button id="copyBtn" onclick="copyCode()">코드 복사하기</button>
+
+    <script id="practice-code">
+        var count = 0;  //전역변수
+
+        initSystem();   //initSystem함수 수행
+
+        //전역함수 정의
+        function initSystem() {
+            count++;    //count + 1
+            document.write("<h3>--- 시스템 접속 횟수: " + count + " ---</h3>");     //접속 횟수 출력
+
+            //지역함수 정의
+            function User(id, point) {
+                this.userId = id;       //지역변수에 매개변수 값을 대입
+                this.userPoint = point; 
+                //지역변수에 익명함수 대입
+                this.displayInfo = function() {
+                    //현재 사용자정보 출력
+                    return "사용자: " + this.userId + " (현재 포인트: " + this.userPoint + ")";
+                };
+            }
+
+            var inputId = prompt("아이디를 입력하세요.", "guest");      //사용자에게 아이디 입력받음
+            var newUser = new User(inputId, 1000);                      //사용자 정보 저장할 객체 생성
+            
+            document.write(newUser.displayInfo() + "<br>");             //사용자 정보 출력
+
+            var addValue = prompt("추가할 포인트를 입력하세요.", "0");      //사용자에게 포인트 입력받음
+
+            if (isNaN(addValue)) {                                      //입력받은 포인트가 숫자인지 확인
+                alert("숫자만 입력 가능합니다.");           
+            } else {
+                var pointAmount = parseInt(addValue);                   //포인트값이 정상일 경우 문자열을 정수로 형변환
+                
+                document.write("포인트 적립 시작... ");
+                startTimer(3);                                          //함수 호출
+
+                var finalPoint = calculatePoint(newUser.userPoint, pointAmount);    //함수 호출 후 반환값을 저장
+                document.write("<br><strong>최종 포인트: " + finalPoint + "</strong>"); //반환값 출력
+            }
+        }
+
+        //전역함수
+        function calculatePoint(current, add) {
+            var processMsg = "계산 중..."; 
+            console.log(processMsg);    //콘솔에 값 출력
+            return current + add;       //기존포인트에 입력받은 포인트를 더한 값 반환
+        }
+
+        //재귀함수
+        function startTimer(n) {
+            if (n == 0) {                   //n값이 0이 아닐 경우 리턴하지 않고 함수 호출
+                document.write(" 완료!");   //카운트 다운
+                return; 
+            }
+            document.write(n + " ");
+            startTimer(n - 1);
+        }
+
+        function copyCode() {
+            const code = document.getElementById('practice-code').innerText;    //id가 practice-code인 요소를 찾아 텍스트 반환값 저장
+            navigator.clipboard.writeText(code).then(() => {                    //브라우저객체중 하나로써 환경설정관련 정보모델.
+                alert("코드가 클립보드에 복사되었습니다!");                        //클립보드에 복사가 완료되면 완료되었다는 경고창 생성
+            });
+        }
+    </script>
+</body>
+
+</html>

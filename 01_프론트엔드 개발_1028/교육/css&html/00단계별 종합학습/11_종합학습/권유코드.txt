@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    /* 미션 1: 연결 선택자 */
+#wrapper h1 { color: darkblue; }
+nav.main-nav > ul { border: 2px dotted #ccc; padding: 10px; list-style: none; }
+h2 + table { width: 100%; border-collapse: collapse; }
+
+/* 미션 2: 속성 선택자 (*= 만 사용) */
+a[href*="pdf"]::before { content: "[PDF] "; color: red; }
+a[href*="zip"]::after { content: " (압축파일)"; color: gray; }
+p[title*="internal"] { background-color: #fff9c4; padding: 5px; }
+
+/* 미션 3: 가상 클래스 */
+.main-nav a:hover { text-decoration: none; background-color: #f0f0f0; }
+table tr:nth-child(2n) { background-color: #f9f9f9; }
+tbody tr:first-child { color: blue; }
+
+/* 미션 4: 가상 요소 */
+.urgent td:first-child::after {
+    content: " [긴급]";
+    color: red;
+    font-weight: bold;
+}
+h3::first-letter {
+    font-size: 2em;
+    color: orange;
+}
+
+/* 추가 기본 스타일 */
+table th, table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+</style>
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <h1>Cloud Drive</h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">홈</a></li>
+                    <li><a href="project-guide.html">프로젝트 가이드</a></li>
+                    <li><a href="security-notice.pdf">보안 지침(PDF)</a></li>
+                    <li><a href="archive-all.zip">전체 백업(ZIP)</a></li>
+                </ul>
+            </nav>
+        </header>
+    
+        <main id="content">
+            <section class="board">
+                <h2>최근 업데이트 문서</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>파일명</th>
+                            <th>작성자</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="urgent"><td>2026_기획안_최종.docx</td><td>김철수</td><td>승인대기</td></tr>
+                        <tr><td>디자인_시안_v1.png</td><td>이영희</td><td>진행중</td></tr>
+                        <tr class="urgent"><td>서버_점검_리포트.pdf</td><td>박팀장</td><td>완료</td></tr>
+                        <tr><td>분기_실적_보고서.xlsx</td><td>최대리</td><td>진행중</td></tr>
+                    </tbody>
+                </table>
+            </section>
+    
+            <div class="info-box">
+                <h3>시스템 공지</h3>
+                <p>모든 문서는 <strong>암호화</strong>되어 저장됩니다.</p>
+                <p title="internal-only-msg">외부 유출 시 법적 책임을 물을 수 있습니다.</p>
+            </div>
+        </main>
+    </div> 
+</body>
+</html>

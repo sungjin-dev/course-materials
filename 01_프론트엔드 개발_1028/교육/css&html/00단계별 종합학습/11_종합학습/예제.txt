@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>고정 크기 레이아웃</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            width: 900px; /* 전체 고정 너비 */
+            margin: 0;
+            background-color: #f0f0f0; /* 배경 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          
+            font-family: 'Handwritten', cursive; /* 손글씨 폰트 */
+        }
+
+        /* 전체 스케치 컨테이너 (고정 크기) */
+        .sketch-container {
+            width: 800px; /* 전체 고정 너비 */
+            height: 600px; /* 전체 고정 높이 */
+            border: 2px solid black;
+            background-color: white;
+            padding: 10px;
+            box-sizing: border-box; /* 패딩 포함 크기 조절 */
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* 상자 간 간격 */
+            background-image: url('paper-texture.png'); /* 종이 질감 */
+        }
+
+        /* 헤더 (고정 크기, 회색 배경) */
+        header {
+            height: 100px;
+            background-color: #ccc;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        /* 콘텐츠와 사이드바를 감싸는 영역 */
+        .content-wrapper {
+            display: flex;
+            gap: 10px;
+            flex: 1; /* 남은 공간 차지 */
+        }
+
+        /* 콘텐츠 영역 (고정 크기) */
+        section {
+            width: 500px; /* 고정 section 너비 */
+            border: 2px solid black;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        /* 아티클 (고정 높이) */
+        article {
+            height: 50px;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        /* 사이드바 (고정 크기) */
+        aside {
+            width: 250px; /* 고정 aside 너비 */
+            border: 2px solid black;
+            padding: 10px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        /* 푸터 (고정 높이) */
+        footer {
+            height: 80px;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        /* 텍스트 스타일 */
+        span.tag { font-weight: normal; }
+        span.label { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="sketch-container">
+        <header>
+            <span class="tag">&lt;header&gt;</span>
+            <span class="label">헤더</span>
+        </header>
+        <div class="content-wrapper">
+            <section>
+                <span class="tag">&lt;Section&gt;</span>
+                <span class="label">콘텐츠 영역</span>
+                <article>
+                    <span class="tag">&lt;article&gt;</span>
+                </article>
+                <article>
+                    <span class="tag">&lt;article&gt;</span>
+                </article>
+            </section>
+            <aside>
+                <span class="tag">&lt;aside&gt;</span>
+                <span class="label">사이드바</span>
+            </aside>
+        </div>
+        <footer>
+            <span class="tag">&lt;footer〉</span>
+            <span class="label">푸터</span>
+        </footer>
+    </div>
+</body>
+</html>

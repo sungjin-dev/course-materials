@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트 함수 종합 실습</title>
+    <style>
+        #copyBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #copyBtn:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+
+    <button id="copyBtn" onclick="copyCode()">코드 복사하기</button>
+
+    <script id="practice-code">
+        var count = 0;
+
+        initSystem();
+
+        function initSystem() {
+            count++;
+            document.write("<h3>--- 시스템 접속 횟수: " + count + " ---</h3>");
+
+            function User(id, point) {
+                this.userId = id;
+                this.userPoint = point;
+                this.displayInfo = function() {
+                    return "사용자: " + this.userId + " (현재 포인트: " + this.userPoint + ")";
+                };
+            }
+
+            var inputId = prompt("아이디를 입력하세요.", "guest");
+            var newUser = new User(inputId, 1000);
+            
+            document.write(newUser.displayInfo() + "<br>");
+
+            var addValue = prompt("추가할 포인트를 입력하세요.", "0");
+
+            if (isNaN(addValue)) {
+                alert("숫자만 입력 가능합니다.");
+            } else {
+                var pointAmount = parseInt(addValue);
+                
+                document.write("포인트 적립 시작... ");
+                startTimer(3);
+
+                var finalPoint = calculatePoint(newUser.userPoint, pointAmount);
+                document.write("<br><strong>최종 포인트: " + finalPoint + "</strong>");
+            }
+        }
+
+        function calculatePoint(current, add) {
+            var processMsg = "계산 중..."; 
+            console.log(processMsg);
+            return current + add;
+        }
+
+        function startTimer(n) {
+            if (n == 0) {
+                document.write(" 완료!");
+                return; 
+            }
+            document.write(n + " ");
+            startTimer(n - 1);
+        }
+
+        function copyCode() {
+            const code = document.getElementById('practice-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("코드가 클립보드에 복사되었습니다!");
+            });
+        }
+    </script>
+</body>
+</html>

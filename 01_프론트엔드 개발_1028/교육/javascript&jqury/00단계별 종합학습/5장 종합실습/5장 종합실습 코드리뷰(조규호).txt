@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트 함수 종합 실습</title>
+    <style>
+        /* 복사하기 버튼 스타일 값 */
+        #copyBtn {
+            padding: 10px 20px; /* 스타일 지정 padding 값 */
+            background-color: #4CAF50; /* 배경 컬러 */
+            color: white; /* 글자 색 */
+            border: none; /* 테두리 없이 */
+            border-radius: 5px; /* 테두리 모서리 깍기 */
+            cursor: pointer; /* 커서 모양 */
+            margin-bottom: 20px; /* 스타일 지정 아래쪽 margin 값 */
+        }
+        /* 복사하기 버튼 올렸을때 배경 변경 값 */
+        #copyBtn:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <!-- 지정된 코드 복사 하기 버튼 -->
+    <button id="copyBtn" onclick="copyCode()">코드 복사하기</button>
+
+    <!-- 스크립트에 id - practice-code 넣어주기 -->
+    <script id="practice-code">
+
+        // 변수 count 0값 선언
+        var count = 0;
+
+        // initSystem 코드 호출(사용)
+        initSystem();
+
+        // initSystem 함수 정의
+        function initSystem() {
+
+            // count 숫자 1증가
+            count++;
+
+            // 코드가 반복된 횟수를 '시스템 접속 횟수'로 보여주는 문구
+            document.write("<h3>--- 시스템 접속 횟수: " + count + " ---</h3>");
+
+            // User 함수에 id, point라는 매개변수를 각 선언
+            function User(id, point) {
+                this.userId = id; // 인스턴스 생성
+                this.userPoint = point; // 인스턴스 생성
+                this.displayInfo = function() { // 입력받은 사용자 명과 기본 설정을 넣어놓은 포인트값 (1000) 출력
+                    return "사용자: " + this.userId + " (현재 포인트: " + this.userPoint + ")";
+                };
+            }
+
+            // 아이디 입력 받아 inputId에 저장 및 기본 입력값 guest로 지정
+            var inputId = prompt("아이디를 입력하세요.", "guest");
+            var newUser = new User(inputId, 1000); // 입력받은 유저명과 그 유저에게 1000의 값을 저장
+            
+            // 화면에 아이디및 포인트 출력후 줄바꿈
+            document.write(newUser.displayInfo() + "<br>");
+
+            // 포인트를 입력받아 addValue에 저장 및 기본 입력값 0으로 지정
+            var addValue = prompt("추가할 포인트를 입력하세요.", "0");
+
+            // addvalue(포인트)입력값에 만약 문자가 있다면 "숫자만 입력 가능합니다." 출력
+            if (isNaN(addValue)) {
+                alert("숫자만 입력 가능합니다.");
+            } else { // 아니라면 값을 pointAmount에 정수로 저장
+                var pointAmount = parseInt(addValue);
+                
+                document.write("포인트 적립 시작... "); // 문자 출력
+                startTimer(3); // startTimer에 3등록
+
+                // 기존에 제공된 포인트 값과 사용자가 입력한 포인트 값을 변수에 등록
+                var finalPoint = calculatePoint(newUser.userPoint, pointAmount);
+                
+                // 최종 포인트 finalPoint변수 출력
+                document.write("<br><strong>최종 포인트: " + finalPoint + "</strong>");
+            }
+        }
+
+        // calculatePoint 함수에 있는 newUser.userPoint, pointAmount 값을 각각 current, add로 변환
+        function calculatePoint(current, add) {
+            var processMsg = "계산 중..."; // 메세지 출력
+            console.log(processMsg);
+            return current + add; // 변환했던 값들을 더해주기
+        }
+
+       
+        function startTimer(n) {
+            if (n == 0) { // starttimer에 등록되어있던 숫자가 0이 되면 "완료!" 출력
+                document.write(" 완료!");
+                return; 
+            }
+            document.write(n + " "); // starttimer에 등록되어있던 숫자를 1일 내리며 각각 출력 " " <-이건 띄워쓰기
+            startTimer(n - 1);
+        }
+
+        function copyCode() { // copyCode 함수 선언
+            // 변하지 않는 상수 code를 const를 이용해 선언
+            // 위에 id로 선언 해줬던 practice-code를 텍스트 형식으로..? 복사
+            const code = document.getElementById('practice-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("코드가 클립보드에 복사되었습니다!");
+            });
+        }
+    </script>
+</body>
+</html>

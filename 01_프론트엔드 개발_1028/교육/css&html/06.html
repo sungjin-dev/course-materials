@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06. 텍스트 관련 스타일</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP & RESET */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: #020617; 
+            display: grid;
+            gap: 20px;
+            place-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* 2. SLIDE CONTAINER */
+        .slide-container {
+            align-items: flex-start;
+            background: radial-gradient(circle at 80% 20%, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            width: 1280px;
+            overflow: hidden;
+            padding: 50px 60px;
+            position: relative;
+        }
+
+        /* Background Grid */
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-container > * { position: relative; z-index: 1; width: 100%; }
+
+        /* 3. TYPOGRAPHY */
+        h1, h2, h3 { font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #f8fafc; font-weight: 700; }
+        p, li { color: #94a3b8; font-weight: 400; line-height: 1.6; font-size: 17px; }
+        
+        .slide-title { font-size: 40px; margin-bottom: 25px; border-bottom: 2px solid #1e293b; padding-bottom: 12px; }
+        .slide-title span { color: #38bdf8; font-family: 'Fira Code', monospace; font-size: 32px; font-weight: 500; }
+        
+        /* 4. LAYOUTS */
+        .content-area { display: flex; flex-grow: 1; width: 100%; height: calc(100% - 85px); }
+        .code-layout { display: grid; grid-template-columns: 1.8fr 1fr; gap: 30px; width: 100%; height: 100%; }
+
+        /* 5. CODE BLOCK STYLING */
+        .code-box {
+            background-color: #0b1120;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            border-left: 4px solid #38bdf8;
+            padding: 30px;
+            font-family: 'Fira Code', monospace;
+            font-size: 18px;
+            line-height: 1.4;
+            color: #e2e8f0;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        /* Custom Scrollbar */
+        .code-box::-webkit-scrollbar { width: 8px; }
+        .code-box::-webkit-scrollbar-track { background: #0b1120; }
+        .code-box::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+
+        .line { display: flex; align-items: center; min-height: 24px; white-space: pre; }
+        .indent-1 { padding-left: 2rem; }
+        .indent-2 { padding-left: 4rem; }
+        .indent-3 { padding-left: 6rem; }
+
+        .code-box .tag { color: #38bdf8; } 
+        .code-box .attr { color: #a78bfa; } 
+        .code-box .val { color: #a3e635; } 
+        .code-box .cmt { color: #64748b; font-style: italic; }
+
+        /* 6. TEXT COLUMN STYLING */
+        .text-column { display: flex; flex-direction: column; gap: 20px; justify-content: center;}
+        .text-box { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .text-box h3 { font-size: 20px; color: #f8fafc; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .text-box h3 i { color: #38bdf8; }
+        
+        .bullet-list { list-style: none; padding: 0; margin: 0; }
+        .bullet-list li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 16px; }
+        .bullet-list li::before { content: '>'; position: absolute; left: 0; color: #38bdf8; font-family: 'Fira Code', monospace; font-weight: bold; }
+
+        /* TITLE SLIDE SPECIFIC */
+        .bleed-image-layout { padding: 0; grid-template-columns: 1.1fr 0.9fr; align-items: center; display: grid; }
+        .bleed-text-side { padding: 60px; }
+        .bleed-text-side h1 { font-size: 64px; line-height: 1.2; margin-bottom: 20px; }
+        .bleed-text-side h1 span { color: #38bdf8; }
+        .bleed-image-side { height: 720px; width: 100%; border-radius: 0 12px 12px 0; border-left: 1px solid #1e293b; display: block; }
+        .index-list { margin-top: 40px; display: flex; flex-direction: column; gap: 15px; }
+        .index-item { background: rgba(15, 23, 42, 0.6); padding: 15px 25px; border-radius: 8px; border: 1px solid #334155; font-size: 19px; color: #e2e8f0; font-weight: 500; }
+        .index-item span { color: #38bdf8; font-weight: 700; margin-right: 15px; }
+
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title Slide -->
+<div class="slide-container bleed-image-layout" id="slide1">
+    <div class="bleed-text-side">
+        <h1>06. <span>텍스트 관련 스타일</span></h1>
+        <p>웹 문서의 가독성과 디자인을 결정하는 핵심 기법</p>
+        
+        <div class="index-list">
+            <div class="index-item"><span>06-1</span> 글꼴 관련 스타일 (font-family, size)</div>
+            <div class="index-item"><span>06-2</span> 텍스트 스타일 (color, shadow)</div>
+            <div class="index-item"><span>06-3</span> 문단 스타일 (align, line-height)</div>
+            <div class="index-item"><span>06-4</span> 목록과 링크 스타일 (list-style)</div>
+        </div>
+    </div>
+    <div class="image-container">
+        <svg class="bleed-image-side" viewBox="0 0 600 720" xmlns="http://www.w3.org/2000/svg">
+            <rect width="600" height="720" fill="#0f172a" />
+            <defs>
+                <pattern id="gridPattern" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#1e293b" stroke-width="1"/>
+                </pattern>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <rect width="600" height="720" fill="url(#gridPattern)" />
+            <circle cx="150" cy="200" r="200" fill="#38bdf8" opacity="0.1" style="filter: blur(60px);" />
+            <text x="300" y="380" fill="#38bdf8" font-size="160" font-family="'Poppins', sans-serif" font-weight="700" text-anchor="middle" filter="url(#glow)">Aa</text>
+            <text x="300" y="520" fill="#e2e8f0" font-size="24" font-family="'Noto Sans KR', sans-serif" text-anchor="middle">Typography & Styles</text>
+        </svg>
+    </div>
+</div>
+
+<!-- Slide 2: font-family 글꼴 지정 -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">06-1. 글꼴 지정 <span>font-family</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">body</span> {</div>
+                <div class="line indent-2"><span class="attr">font-family</span>:</div>
+                <div class="line indent-3"><span class="val">"맑은 고딕"</span>,</div>
+                <div class="line indent-3"><span class="val">돋움</span>,</div>
+                <div class="line indent-3"><span class="val">굴림</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">body</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">p</span>&gt;지정한 순서대로 글꼴이 적용됩니다.&lt;/<span class="tag">p</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">body</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-font"></i> 글꼴 우선순위</h3>
+                    <ul class="bullet-list">
+                        <li>첫 번째 글꼴이 없으면 두 번째, 그마저 없으면 세 번째 글꼴을 사용합니다.</li>
+                        <li>글꼴 이름에 공백이 있다면 반드시 큰따옴표(<code>""</code>)로 묶어줍니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: font-size 글꼴 크기 -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">06-1. 글꼴 크기 <span>font-size &amp; 단위</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">.title</span> { <span class="attr">font-size</span>: <span class="val">2rem</span>; }</div>
+                <div class="line indent-1"><span class="tag">.desc</span> { <span class="attr">font-size</span>: <span class="val">16px</span>; }</div>
+                <div class="line indent-1"><span class="tag">.small</span> { <span class="attr">font-size</span>: <span class="val">0.8em</span>; }</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">h1</span> <span class="attr">class</span>=<span class="val">"title"</span>&gt;메인 제목&lt;/<span class="tag">h1</span>&gt;</div>
+                <div class="line">&lt;<span class="tag">p</span> <span class="attr">class</span>=<span class="val">"desc"</span>&gt;일반 설명 텍스트&lt;/<span class="tag">p</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-text-height"></i> 크기 단위 비교</h3>
+                    <ul class="bullet-list">
+                        <li><strong>px:</strong> 절대적인 고정 크기.</li>
+                        <li><strong>em:</strong> 부모 요소 기준 상대 크기.</li>
+                        <li><strong>rem:</strong> 최상위(html) 기준 상대 크기.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: 굵기 및 스타일 -->
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">06-1. 굵기 및 스타일 <span>weight &amp; style</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">.bold-text</span> {</div>
+                <div class="line indent-2"><span class="attr">font-weight</span>: <span class="val">700</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line indent-1"><span class="tag">.italic-text</span> {</div>
+                <div class="line indent-2"><span class="attr">font-style</span>: <span class="val">italic</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">p</span> <span class="attr">class</span>=<span class="val">"bold-text"</span>&gt;굵은 글씨&lt;/<span class="tag">p</span>&gt;</div>
+                <div class="line">&lt;<span class="tag">p</span> <span class="attr">class</span>=<span class="val">"italic-text"</span>&gt;기울임꼴 글씨&lt;/<span class="tag">p</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-bold"></i> 속성 상세</h3>
+                    <ul class="bullet-list">
+                        <li><strong>weight:</strong> 숫자(100~900) 또는 키워드(bold, normal) 사용.</li>
+                        <li><strong>style:</strong> normal, italic, oblique 중 선택.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: 텍스트 색상 및 데코레이션 -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">06-2. 텍스트 꾸미기 <span>color &amp; decoration</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">a</span> {</div>
+                <div class="line indent-2"><span class="attr">color</span>: <span class="val">rgb(56, 189, 248)</span>;</div>
+                <div class="line indent-2"><span class="attr">text-decoration</span>: <span class="val">none</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line indent-1"><span class="tag">.del</span> {</div>
+                <div class="line indent-2"><span class="attr">text-decoration</span>: <span class="val">line-through</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="val">"#"</span>&gt;밑줄 없는 링크&lt;/<span class="tag">a</span>&gt;</div>
+                <div class="line">&lt;<span class="tag">span</span> <span class="attr">class</span>=<span class="val">"del"</span>&gt;취소선 텍스트&lt;/<span class="tag">span</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-palette"></i> 시각적 강조</h3>
+                    <ul class="bullet-list">
+                        <li><strong>color:</strong> 텍스트 자체의 색상을 지정합니다.</li>
+                        <li><strong>decoration:</strong> <code>none</code>으로 링크 밑줄을 없애거나 <code>underline</code>으로 강조를 추가합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: 텍스트 그림자 효과 -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">06-2. 텍스트 그림자 <span>text-shadow</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">h1</span> {</div>
+                <div class="line indent-2"><span class="attr">text-shadow</span>:</div>
+                <div class="line indent-3"><span class="val">2px</span> <span class="val">2px</span> <span class="val">4px</span> <span class="val">#000</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">h1</span>&gt;입체감 있는 제목&lt;/<span class="tag">h1</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-circle-half-stroke"></i> 그림자 값 순서</h3>
+                    <ul class="bullet-list">
+                        <li>가로거리, 세로거리, 번짐정도, 색상 순서로 입력합니다.</li>
+                        <li>여러 개의 그림자를 쉼표(<code>,</code>)로 구분해 겹칠 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: 정렬 및 줄 간격 -->
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">06-3. 문단 스타일 <span>align &amp; line-height</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">p</span> {</div>
+                <div class="line indent-2"><span class="attr">text-align</span>: <span class="val">justify</span>;</div>
+                <div class="line indent-2"><span class="attr">line-height</span>: <span class="val">1.8</span>;</div>
+                <div class="line indent-2"><span class="attr">text-indent</span>: <span class="val">1em</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">p</span>&gt;양쪽 정렬과 줄 간격이 적용된 긴 문장입니다.&lt;/<span class="tag">p</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-align-justify"></i> 가독성 조절</h3>
+                    <ul class="bullet-list">
+                        <li><strong>justify:</strong> 양쪽 끝을 맞춰 깔끔하게 정렬합니다.</li>
+                        <li><strong>line-height:</strong> 줄 간격을 넓혀 눈의 피로를 줄입니다.</li>
+                        <li><strong>text-indent:</strong> 문단의 첫 줄을 들여씁니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: 넘치는 텍스트 말줄임 -->
+<div class="slide-container" id="slide8">
+    <h2 class="slide-title">06-3. 말줄임표 처리 <span>overflow &amp; ellipsis</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">.cut</span> {</div>
+                <div class="line indent-2"><span class="attr">width</span>: <span class="val">150px</span>;</div>
+                <div class="line indent-2"><span class="attr">white-space</span>: <span class="val">nowrap</span>;</div>
+                <div class="line indent-2"><span class="attr">overflow</span>: <span class="val">hidden</span>;</div>
+                <div class="line indent-2"><span class="attr">text-overflow</span>: <span class="val">ellipsis</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="val">"cut"</span>&gt;</div>
+                <div class="line indent-1">내용이 너무 길면 잘리고 점으로 표시됩니다...</div>
+                <div class="line">&lt;/<span class="tag">div</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-ellipsis"></i> 필수 3가지 속성</h3>
+                    <ul class="bullet-list">
+                        <li>줄바꿈 금지(nowrap)</li>
+                        <li>영역 밖 숨김(hidden)</li>
+                        <li>말줄임표 출력(ellipsis)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: 목록 스타일 (불릿) -->
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title">06-4. 목록 꾸미기 <span>list-style-type</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">ul</span> {</div>
+                <div class="line indent-2"><span class="attr">list-style-type</span>: <span class="val">square</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line indent-1"><span class="tag">nav ul</span> {</div>
+                <div class="line indent-2"><span class="attr">list-style</span>: <span class="val">none</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">ul</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">li</span>&gt;네모 모양 불릿 목록&lt;/<span class="tag">li</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">ul</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-list-ul"></i> 불릿 제거 (none)</h3>
+                    <ul class="bullet-list">
+                        <li>네비게이션 메뉴를 만들 때 불릿 기호를 없애기 위해 <code>none</code>을 자주 사용합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: 목록 이미지 및 위치 -->
+<div class="slide-container" id="slide10">
+    <h2 class="slide-title">06-4. 목록 커스텀 <span>image &amp; position</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">style</span>&gt;</div>
+                <div class="line indent-1"><span class="tag">.custom</span> {</div>
+                <div class="line indent-2"><span class="attr">list-style-image</span>: <span class="val">url('bullet.png')</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line indent-1"><span class="tag">.in</span> {</div>
+                <div class="line indent-2"><span class="attr">list-style-position</span>: <span class="val">inside</span>;</div>
+                <div class="line indent-1">}</div>
+                <div class="line">&lt;/<span class="tag">style</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- HTML 적용 예시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">ul</span> <span class="attr">class</span>=<span class="val">"in"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">li</span>&gt;불릿이 텍스트 영역 안으로 들어옵니다.&lt;/<span class="tag">li</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">ul</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-indent"></i> 상세 제어</h3>
+                    <ul class="bullet-list">
+                        <li>이미지를 직접 불릿으로 쓰거나, 불릿의 위치를 텍스트 안(inside) 또는 밖(outside)으로 조절할 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

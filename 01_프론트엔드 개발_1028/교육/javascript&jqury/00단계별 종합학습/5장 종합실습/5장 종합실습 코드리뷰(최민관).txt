@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트 함수 종합 실습</title>
+    <style>
+        #copyBtn {
+            padding: 10px 20px; /*패딩*/
+            background-color: #4CAF50; /*배경색 초록*/
+            color: white; /*글자색 흰색*/
+            border: none; /*테두리 x*/
+            border-radius: 5px; /*모서리*/
+            cursor: pointer; /*커서*/
+            margin-bottom: 20px; /*아래쪽 마진*/
+        }
+        #copyBtn:hover { background-color: #45a049; } /*호버 초록색*/
+    </style>
+</head>
+<body>
+
+    <button id="copyBtn" onclick="copyCode()">코드 복사하기</button>
+    <!-- onclick 클릭시 함수로 이동 -->
+    <script id="practice-code">
+        var count = 0; // 숫자형 변수 선언
+
+        initSystem(); // 함수 호출
+
+        function initSystem() { // 함수정의 ,function 함수
+            count++; // count=count+1
+            document.write("<h3>--- 시스템 접속 횟수: " + count + " ---</h3>");
+            // document.write 코드 내용 실행, + 이어서 내용 추가
+            function User(id, point) { // function 함수명(매개변수)
+                this.userId = id; // this.속성명 = 새 값
+                this.userPoint = point; // this.속성명 = 새 값
+                this.displayInfo = function() { // this.함수명
+                    return "사용자: " + this.userId + " (현재 포인트: " + this.userPoint + ")";
+                };// return 함수종료, 값 전달
+            }
+
+            var inputId = prompt("아이디를 입력하세요.", "guest");
+            // prompt("n", "") (출력, 입력)
+            var newUser = new User(inputId, 1000);
+            // 내장 객체 생성
+            document.write(newUser.displayInfo() + "<br>");
+            // 코드 내용 실행
+            var addValue = prompt("추가할 포인트를 입력하세요.", "0");
+            // prompt("n", "") (출력, 입력)
+            if (isNaN(addValue)) { //숫자가 아닌 문자가 포함되면 true
+                alert("숫자만 입력 가능합니다.");
+            } else { // if ~ else문 조건문 if가 false면 else로 감
+                var pointAmount = parseInt(addValue);
+                // 변수 선언
+                document.write("포인트 적립 시작... ");
+                startTimer(3); // 함수에 3대입
+
+                var finalPoint = calculatePoint(newUser.userPoint, pointAmount);
+                document.write("<br><strong>최종 포인트: " + finalPoint + "</strong>");
+            }
+        }
+
+        function calculatePoint(current, add) {
+            var processMsg = "계산 중..."; 
+            console.log(processMsg); // F12 console에서 확인
+            return current + add; // return 함수종료, 값 전달
+        }
+
+        function startTimer(n) {
+            if (n == 0) { // n 이 0과 같은가?
+                document.write(" 완료!"); //코드 내용 실행
+                return; // return 함수종료, 값 전달
+            }
+            document.write(n + " ");
+            startTimer(n - 1);
+        } // if문이 true가 될때까지 } 못빠져 나오고 반복함
+
+        function copyCode() {
+            const code = document.getElementById('practice-code').innerText; 
+            // const 상수, 초기화한 값이후 값변경 불가, get응용프로그램
+            navigator.clipboard.writeText(code).then(() => {
+                alert("코드가 클립보드에 복사되었습니다!"); 
+            }); // alert 내용 출력
+        }
+    </script>
+</body>
+</html>

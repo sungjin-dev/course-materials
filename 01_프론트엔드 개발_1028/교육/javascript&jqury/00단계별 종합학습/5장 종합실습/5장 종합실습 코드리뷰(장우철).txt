@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>자바스크립트 함수 종합 실습</title>
+    <style>
+      /* body영역의 버튼 스타일*/
+      #copyBtn {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+      /* 버튼위로 커서를 올릴 시 색상변경*/
+      #copyBtn:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- id가 copyBtn인 버튼 생성 , 클릭시 아래 copyCode 함수 실행-->
+    <button id="copyBtn" onclick="copyCode()">코드 복사하기</button>
+    <!-- id가 practice-code 인 script 생성-->
+    <script id="practice-code">
+      var count = 0;
+      /*전역함수 0 지정*/
+      initSystem();
+      /*아래 initSystem 함수 실행 */
+      function initSystem() {
+        count++;
+        /* initSystem 함수 실행 전역함수가 1 증가하고 document.write 실행 */
+        document.write("<h3>--- 시스템 접속 횟수: " + count + " ---</h3>");
+        /*User 함수 , userID,userPoint 변수 생성 */
+        function User(id, point) {
+          this.userId = id;
+          this.userPoint = point;
+          /* 사용자 이름과 , 사용자 포인트를 알려주는 함수*/
+          this.displayInfo = function () {
+            return (
+              "사용자: " +
+              this.userId +
+              " (현재 포인트: " +
+              this.userPoint +
+              ")"
+            );
+          };
+        }
+        /* 실행시 아이디를 입력하는 입력란 생성 , guest 적어놓는 변수 */
+        var inputId = prompt("아이디를 입력하세요.", "guest");
+        var newUser = new User(inputId, 1000); // 유저 이름과 , 포인트가 나오는 전역함수
+        /* 새로운 사용자 이름이 들어간 displayInfo 함수 실행 */
+        document.write(newUser.displayInfo() + "<br>");
+        /* 추가 포인트 작성 */
+        var addValue = prompt("추가할 포인트를 입력하세요.", "0");
+        /* 숫자만 입력 가능한 if else문 생성*/
+        if (isNaN(addValue)) {
+          alert("숫자만 입력 가능합니다.");
+        } else {
+          /*포인트 계산식에 숫자를 정수로 만듦*/
+          var pointAmount = parseInt(addValue);
+          /* 글 이후 타이머 */
+          document.write("포인트 적립 시작... ");
+          startTimer(5);
+          /* 최종 포인트 아래 calculatePoint 함수 실행 후 , 결과인 finalPoint 값을 받아서 입력*/
+          var finalPoint = calculatePoint(newUser.userPoint, pointAmount);
+          document.write(
+            "<br><strong>최종 포인트: " + finalPoint + "</strong>"
+          );
+        }
+        /*아래 startTimer와 calculatePoint 영향을 받기때문에 포인트 적립 시작... 메세지 이후
+             startTimer 관련 함수 종료 후 , 포인트 합산 함수 종료 이후 최종포인트 메세지 출력(포인트 합산 후)*/
+      }
+      /* add는 추가하는 포인트(add=>pointAmount=>프롬포트에 작성한 추가포인트*/
+      /* current => newUser의 userPoint (갖고있던 포인트 1000으로 설정) */
+      function calculatePoint(current, add) {
+        /*콘솔 로그에 계산중... 이라는 메세지 출력*/
+        var processMsg = "계산 중...";
+        console.log(processMsg);
+        /* add(추가할 포인트)와 current (갖고있던 포인트) 합산*/
+        return current + add;
+      }
+      /* 위에 startTimer의 수가 0이 될때 완료 메세지 출력 이후 , 종료*/
+      function startTimer(n) {
+        if (n == 0) {
+          document.write(" 완료!");
+          return;
+        }
+        /*startTimer의 변수가 0이 아닐때 n과 공백칸 출력하면서, 변수가 0이 될때까지 1씩 감소하면서 반복 */
+        document.write(n + " ");
+        startTimer(n - 1);
+      }
+      /*const 상수 (값 변경이 불가능하게 만듦)*/
+      /*id가 practice-code 검색 */
+      function copyCode() {
+        const code = document.getElementById("practice-code").innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          alert("코드가 클립보드에 복사되었습니다!");
+        });
+      }
+    </script>
+  </body>
+</html>

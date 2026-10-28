@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML 텍스트 관련 태그</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP & RESET */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: #020617; 
+            display: grid;
+            gap: 20px;
+            place-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* 2. SLIDE CONTAINER */
+        .slide-container {
+            align-items: flex-start;
+            background: radial-gradient(circle at 80% 20%, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            width: 1280px;
+            overflow: hidden;
+            padding: 50px 60px;
+            position: relative;
+        }
+
+        /* Background Grid */
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-container > * { position: relative; z-index: 1; width: 100%; }
+
+        /* 3. TYPOGRAPHY */
+        h1, h2, h3 { font-family: 'Poppins', 'Noto Sans KR', sans-serif; color: #f8fafc; font-weight: 700; }
+        p, li { color: #94a3b8; font-weight: 400; line-height: 1.6; font-size: 17px; }
+        
+        .slide-title { font-size: 40px; margin-bottom: 25px; border-bottom: 2px solid #1e293b; padding-bottom: 12px; }
+        .slide-title span { color: #38bdf8; font-family: 'Fira Code', monospace; font-size: 32px; font-weight: 500; }
+        
+        /* 4. LAYOUTS */
+        .content-area { display: flex; flex-grow: 1; width: 100%; height: calc(100% - 85px); }
+        .code-layout { display: grid; grid-template-columns: 1.8fr 1fr; gap: 30px; width: 100%; height: 100%; }
+
+        /* 5. CODE BLOCK STYLING (Optimized for One Tag Per Line) */
+        .code-box {
+            background-color: #0b1120;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            border-left: 4px solid #38bdf8;
+            padding: 30px;
+            font-family: 'Fira Code', monospace;
+            font-size: 19px;
+            line-height: 1.5;
+            color: #e2e8f0;
+            overflow-y: auto; /* 내용이 길어지면 스크롤 가능하도록 수정 */
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* 코드가 위에서부터 정렬되도록 수정 */
+        }
+        
+        /* 커스텀 스크롤바 */
+        .code-box::-webkit-scrollbar { width: 8px; }
+        .code-box::-webkit-scrollbar-track { background: #0b1120; }
+        .code-box::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        .code-box::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+        .line { display: flex; align-items: center; min-height: 28px; white-space: pre; }
+        .indent-1 { padding-left: 2rem; }
+        .indent-2 { padding-left: 4rem; }
+        .indent-3 { padding-left: 6rem; }
+        .indent-4 { padding-left: 8rem; }
+        .indent-5 { padding-left: 10rem; }
+
+        .code-box .tag { color: #38bdf8; }
+        .code-box .attr { color: #a78bfa; }
+        .code-box .val { color: #a3e635; }
+        .code-box .cmt { color: #64748b; font-style: italic; }
+
+        /* 6. TEXT COLUMN STYLING */
+        .text-column { display: flex; flex-direction: column; gap: 20px; justify-content: center;}
+        .text-box { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .text-box h3 { font-size: 20px; color: #f8fafc; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .text-box h3 i { color: #38bdf8; }
+        
+        .bullet-list { list-style: none; padding: 0; margin: 0; }
+        .bullet-list li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 16px; }
+        .bullet-list li::before { content: '>'; position: absolute; left: 0; color: #38bdf8; font-family: 'Fira Code', monospace; font-weight: bold; }
+        .bullet-list li strong { color: #f8fafc; }
+
+        /* TITLE SLIDE SPECIFIC */
+        .bleed-image-layout { padding: 0; grid-template-columns: 1fr 1fr; align-items: center; display: grid; }
+        .bleed-text-side { padding: 60px; }
+        .bleed-text-side h1 { font-size: 64px; line-height: 1.2; margin-bottom: 20px; }
+        .bleed-text-side h1 span { color: #38bdf8; }
+        .bleed-text-side p { font-size: 24px; color: #cbd5e1; }
+        .bleed-image-side { height: 720px; width: 100%; object-fit: cover; border-radius: 0 12px 12px 0; border-left: 1px solid #1e293b; }
+        .index-list { margin-top: 40px; display: flex; flex-direction: column; gap: 15px; }
+        .index-item { background: rgba(15, 23, 42, 0.6); padding: 15px 25px; border-radius: 8px; border: 1px solid #334155; font-size: 20px; color: #e2e8f0; font-weight: 500; }
+        .index-item span { color: #38bdf8; font-weight: 700; margin-right: 15px; }
+
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title Slide (Bleed Image Right) -->
+<div class="slide-container bleed-image-layout" id="slide1">
+    <div class="bleed-text-side">
+        <h2>02. <span>텍스트 및 표 관련 태그</span></h2>
+        <p>HTML5 필수 요소 완벽 가이드</p>
+        
+        <div class="index-list">
+            <div class="index-item"><span>02-1</span> 텍스트를 덩어리로 묶어주는 태그</div>
+            <div class="index-item"><span>02-2</span> 텍스트를 한 줄로 표시하는 태그</div>
+            <div class="index-item"><span>02-3</span> 목록을 만드는 태그</div>
+            <div class="index-item"><span>02-4</span> 표를 만드는 태그</div>
+        </div>
+    </div>
+    <div class="image-container">
+        <!-- Google Search API placeholder style image -->
+        <img class="bleed-image-side" src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&auto=format&fit=crop&w=1280&q=80" alt="Code editor abstract background">
+    </div>
+</div>
+
+<!-- Slide 2: 02-1 텍스트 덩어리 묶기 (1) -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">02-1. 텍스트 덩어리로 묶기 (1) <span>&lt;hn&gt;, &lt;p&gt;, &lt;br&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">&lt;!-- 1. 제목 표시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">h1</span>&gt;</div>
+                <div class="line indent-1">가장 큰 제목</div>
+                <div class="line">&lt;/<span class="tag">h1</span>&gt;</div>
+                <div class="line">&lt;<span class="tag">h6</span>&gt;</div>
+                <div class="line indent-1">가장 작은 제목</div>
+                <div class="line">&lt;/<span class="tag">h6</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- 2. 단락과 줄바꿈 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">p</span>&gt;</div>
+                <div class="line indent-1">입력한 내용 앞뒤로 빈 줄이 생기며</div>
+                <div class="line indent-1">&lt;<span class="tag">br</span>&gt;</div>
+                <div class="line indent-1">단락 내에서 줄이 바뀝니다.</div>
+                <div class="line">&lt;/<span class="tag">p</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-heading"></i> 제목 (&lt;hn&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li>웹 콘텐츠 영역의 <strong>제목</strong>을 표시.</li>
+                        <li><strong>크기 순서:</strong> h1 (가장 큼) ~ h6 (가장 작음).</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-paragraph"></i> 단락 (&lt;p&gt;) & 줄바꿈 (&lt;br&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;p&gt;:</strong> 텍스트 단락 생성. 앞뒤로 빈 줄 자동 삽입.</li>
+                        <li><strong>&lt;br&gt;:</strong> 강제 줄바꿈. <strong>닫는 태그가 없음</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: 02-1 텍스트 덩어리 묶기 (2) -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">02-1. 텍스트 덩어리로 묶기 (2) <span>&lt;blockquote&gt;, &lt;hr&gt;, &lt;pre&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">&lt;!-- 1. 인용문 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">blockquote</span>&gt;</div>
+                <div class="line indent-1">다른 텍스트보다 안으로 들여 써짐.</div>
+                <div class="line">&lt;/<span class="tag">blockquote</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- 2. 수평 줄 (분위기 전환) --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">hr</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- 3. 원본 그대로 표시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">pre</span>&gt;</div>
+                <div class="line indent-1">공백이나       띄어쓰기가</div>
+                <div class="line indent-1">입력한 그대로 유지됩니다.</div>
+                <div class="line">&lt;/<span class="tag">pre</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-quote-left"></i> 인용문 (&lt;blockquote&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li>인용 내용을 표시하며, 기본적으로 <strong>들여쓰기</strong> 적용.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-minus"></i> 수평 줄 (&lt;hr&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li>주제가 바뀔 때 <strong>분위기 전환</strong> 용도. 닫는 태그 없음.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-file-code"></i> 원본 유지 (&lt;pre&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li>소스 코드의 공백과 줄바꿈을 <strong>있는 그대로</strong> 브라우저에 표시.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: 02-2 한 줄 표시 태그 (1) -->
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">02-2. 텍스트 한 줄로 표시하기 (1) <span>&lt;strong&gt;, &lt;b&gt;, &lt;em&gt;, &lt;i&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">&lt;!-- 1. 굵게 표시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">p</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">strong</span>&gt;</div>
+                <div class="line indent-2">중요한 내용 강조</div>
+                <div class="line indent-1">&lt;/<span class="tag">strong</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">b</span>&gt;</div>
+                <div class="line indent-2">단순히 굵게 표시</div>
+                <div class="line indent-1">&lt;/<span class="tag">b</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">p</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- 2. 이탤릭체 표시 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">p</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">em</span>&gt;</div>
+                <div class="line indent-2">흐름상 강조 (이탤릭)</div>
+                <div class="line indent-1">&lt;/<span class="tag">em</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">i</span>&gt;</div>
+                <div class="line indent-2">단순 이탤릭체</div>
+                <div class="line indent-1">&lt;/<span class="tag">i</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">p</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-bold"></i> 굵게 표시 (&lt;strong&gt;, &lt;b&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;strong&gt;:</strong> 내용이 <strong>중요</strong>하여 강조할 때 사용 (시맨틱).</li>
+                        <li><strong>&lt;b&gt;:</strong> 의미적 강조 없이 <strong>시각적으로만</strong> 굵게 표시.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-italic"></i> 이탤릭체 (&lt;em&gt;, &lt;i&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;em&gt;:</strong> 문장 흐름상 특정 부분을 <strong>강조</strong>할 때 (시맨틱).</li>
+                        <li><strong>&lt;i&gt;:</strong> 의미적 강조 없이 <strong>시각적으로만</strong> 이탤릭체로 표시.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: 02-2 한 줄 표시 태그 (2) -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">02-2. 텍스트 한 줄로 표시하기 (2) <span>&lt;q&gt;, &lt;mark&gt;, &lt;span&gt;, &lt;div&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">p</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">q</span>&gt;</div>
+                <div class="line indent-2">줄바꿈 없는 인용 (따옴표 추가)</div>
+                <div class="line indent-1">&lt;/<span class="tag">q</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">mark</span>&gt;</div>
+                <div class="line indent-2">형광펜 배경색 효과</div>
+                <div class="line indent-1">&lt;/<span class="tag">mark</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">p</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line">&lt;<span class="tag">div</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">span</span>&gt;</div>
+                <div class="line indent-2">줄 안에서 인라인으로 묶기</div>
+                <div class="line indent-1">&lt;/<span class="tag">span</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">div</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-quote-right"></i> 짧은 인용 & 하이라이트</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;q&gt;:</strong> 줄바꿈 없이 한 줄로 표시. 앞뒤에 자동으로 <strong>따옴표("")</strong> 추가.</li>
+                        <li><strong>&lt;mark&gt;:</strong> 묶은 부분의 <strong>배경색(노란색)</strong>이 적용되어 형광펜 효과.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-layer-group"></i> 영역 묶기 (&lt;span&gt;, &lt;div&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;span&gt;:</strong> 줄 안에서 텍스트 일부만 묶을 때 (인라인).</li>
+                        <li><strong>&lt;div&gt;:</strong> 줄을 바꿔 하나의 독립된 단락/블록으로 묶을 때 (블록).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: 02-3 목록 만드는 태그 (1) -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">02-3. 목록을 만드는 태그 (1) <span>&lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">&lt;!-- 순서 없는 목록 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">ul</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">li</span>&gt;</div>
+                <div class="line indent-2">불릿 기호 1</div>
+                <div class="line indent-1">&lt;/<span class="tag">li</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">ul</span>&gt;</div>
+                <div class="line"></div>
+                <div class="line"><span class="cmt">&lt;!-- 순서 있는 목록 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">ol</span> <span class="attr">type</span>=<span class="val">"a"</span> <span class="attr">start</span>=<span class="val">"3"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">li</span>&gt;</div>
+                <div class="line indent-2">c. 항목</div>
+                <div class="line indent-1">&lt;/<span class="tag">li</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">ol</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-list-ul"></i> 순서 없는 목록 (&lt;ul&gt;, &lt;li&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li>각 항목 앞에 <strong>불릿(점)</strong>이 붙습니다.</li>
+                        <li>CSS의 <code>list-style-type</code>으로 불릿 모양 변경 가능.</li>
+                    </ul>
+                </div>
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-list-ol"></i> 순서 있는 목록 (&lt;ol&gt;, &lt;li&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li>각 항목 앞에 <strong>숫자나 알파벳</strong>이 순서대로 붙습니다.</li>
+                        <li><strong>type:</strong> 숫자, 알파벳, 로마자 등 종류 지정.</li>
+                        <li><strong>start:</strong> 중간 번호부터 시작하도록 설정.</li>
+                        <li><strong>reversed:</strong> 역순으로 번호 표시.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: 02-3 목록 만드는 태그 (2) -->
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">02-3. 목록을 만드는 태그 (2) <span>&lt;dl&gt;, &lt;dt&gt;, &lt;dd&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line"><span class="cmt">&lt;!-- 설명 목록 --&gt;</span></div>
+                <div class="line">&lt;<span class="tag">dl</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">dt</span>&gt;</div>
+                <div class="line indent-2">올레 1코스 (제목)</div>
+                <div class="line indent-1">&lt;/<span class="tag">dt</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">dd</span>&gt;</div>
+                <div class="line indent-2">코스: 시흥 초등학교 옆 (설명 1)</div>
+                <div class="line indent-1">&lt;/<span class="tag">dd</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">dd</span>&gt;</div>
+                <div class="line indent-2">거리: 14.6km (설명 2)</div>
+                <div class="line indent-1">&lt;/<span class="tag">dd</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">dl</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-book"></i> 설명 목록 (&lt;dl&gt;, &lt;dt&gt;, &lt;dd&gt;)</h3>
+                    <ul class="bullet-list">
+                        <li><strong>'제목(용어)'</strong>과 그에 대한 <strong>'설명'</strong>으로 이루어진 특수 목록입니다.</li>
+                        <li><strong>&lt;dl&gt;:</strong> 설명 목록 전체를 감싸는 태그.</li>
+                        <li><strong>&lt;dt&gt;:</strong> 제목이나 용어를 나타냅니다.</li>
+                        <li><strong>&lt;dd&gt;:</strong> 해당 용어에 대한 설명을 나타냅니다.</li>
+                        <li>하나의 <code>&lt;dt&gt;</code> 제목 아래에 <strong>여러 개의 <code>&lt;dd&gt;</code></strong> 설명을 가질 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: 02-4 표 만들기 (1) -->
+<div class="slide-container" id="slide8">
+    <h2 class="slide-title">02-4. 표를 만드는 태그 (1) <span>&lt;table&gt;, &lt;tr&gt;, &lt;th&gt;, &lt;td&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">table</span> <span class="attr">border</span>=<span class="val">"1"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">th</span>&gt;</div>
+                <div class="line indent-3">제목 셀</div>
+                <div class="line indent-2">&lt;/<span class="tag">th</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">td</span>&gt;</div>
+                <div class="line indent-3">데이터 셀</div>
+                <div class="line indent-2">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">tr</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">table</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-table-cells"></i> 표 기본 구성 요소</h3>
+                    <ul class="bullet-list">
+                        <li>자료를 보기 좋게 그리드 형태로 정리합니다.</li>
+                        <li><strong>&lt;table&gt;:</strong> 표 전체를 묶어주는 래퍼 태그.</li>
+                        <li><strong>&lt;tr&gt; (Table Row):</strong> 표의 한 <strong>행(가로줄)</strong>을 정의합니다.</li>
+                        <li><strong>&lt;th&gt; (Table Head):</strong> <strong>제목 셀</strong>. 글자가 굵게 표시되며 중앙 정렬됩니다.</li>
+                        <li><strong>&lt;td&gt; (Table Data):</strong> <strong>일반 데이터 셀</strong>. 행 안에 열을 형성합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: 02-4 표 만들기 (2) -->
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title">02-4. 표를 만드는 태그 (2) <span>colspan, rowspan</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">table</span> <span class="attr">border</span>=<span class="val">"1"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">th</span> <span class="attr">rowspan</span>=<span class="val">"2"</span>&gt;</div>
+                <div class="line indent-3">세로 2칸 병합</div>
+                <div class="line indent-2">&lt;/<span class="tag">th</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">td</span> <span class="attr">colspan</span>=<span class="val">"3"</span>&gt;</div>
+                <div class="line indent-3">가로 3칸 병합</div>
+                <div class="line indent-2">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">tr</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">table</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-object-ungroup"></i> 셀 병합 속성</h3>
+                    <ul class="bullet-list">
+                        <li>테이블의 여러 셀(칸)을 하나로 합칠 때 사용합니다. <code>&lt;td&gt;</code>나 <code>&lt;th&gt;</code> 태그의 속성으로 적용.</li>
+                        <li><strong>colspan="합칠 열의 수":</strong> <strong>가로 방향(열, Column)</strong>으로 인접한 셀을 하나로 합칩니다.</li>
+                        <li><strong>rowspan="합칠 행의 수":</strong> <strong>세로 방향(행, Row)</strong>으로 인접한 셀을 하나로 합칩니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: 02-4 표 만들기 (3) -->
+<div class="slide-container" id="slide10">
+    <h2 class="slide-title">02-4. 표를 만드는 태그 (3) <span>&lt;caption&gt;, &lt;figure&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">figure</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">figcaption</span>&gt;</div>
+                <div class="line indent-2">자유로운 위치의 표 제목</div>
+                <div class="line indent-1">&lt;/<span class="tag">figcaption</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">table</span> <span class="attr">border</span>=<span class="val">"1"</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">caption</span>&gt;</div>
+                <div class="line indent-3">상단 중앙 고정 제목</div>
+                <div class="line indent-2">&lt;/<span class="tag">caption</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-3">&lt;<span class="tag">td</span>&gt;</div>
+                <div class="line indent-4">데이터</div>
+                <div class="line indent-3">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-2">&lt;/<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">table</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">figure</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-closed-captioning"></i> 표에 제목 달기</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;caption&gt;:</strong> 표의 <strong>위쪽 중앙</strong>에 제목이 표시됩니다. <code>&lt;table&gt;</code> 태그 바로 아래에 작성해야 합니다.</li>
+                        <li><strong>&lt;figure&gt; &amp; &lt;figcaption&gt;:</strong> <code>&lt;figure&gt;</code>로 테이블을 감싸고, <code>&lt;figcaption&gt;</code>을 위나 아래에 배치하여 <strong>원하는 위치(상/하)</strong>에 제목을 표시할 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: 02-4 표 만들기 (4) -->
+<div class="slide-container" id="slide11">
+    <h2 class="slide-title">02-4. 표를 만드는 태그 (4) <span>&lt;thead&gt;, &lt;tbody&gt;, &lt;tfoot&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">table</span> <span class="attr">border</span>=<span class="val">"1"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">thead</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-3">&lt;<span class="tag">th</span>&gt;</div>
+                <div class="line indent-4">제목</div>
+                <div class="line indent-3">&lt;/<span class="tag">th</span>&gt;</div>
+                <div class="line indent-2">&lt;/<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">thead</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">tbody</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-3">&lt;<span class="tag">td</span>&gt;</div>
+                <div class="line indent-4">본문 데이터</div>
+                <div class="line indent-3">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-2">&lt;/<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">tbody</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">tfoot</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-3">&lt;<span class="tag">th</span>&gt;</div>
+                <div class="line indent-4">요약/합계</div>
+                <div class="line indent-3">&lt;/<span class="tag">th</span>&gt;</div>
+                <div class="line indent-2">&lt;/<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">tfoot</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">table</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-layer-group"></i> 표의 구조화 (Semantic)</h3>
+                    <ul class="bullet-list">
+                        <li>표를 <strong>제목(thead), 본문(tbody), 요약/바닥(tfoot)</strong> 세 가지 논리적 영역으로 분리.</li>
+                        <li>화면 낭독기(스크린 리더)가 표의 구조를 쉽게 파악할 수 있어 <strong>웹 접근성</strong>이 향상됩니다.</li>
+                        <li>자바스크립트/CSS를 통해 본문이 길 경우 제목(thead)을 고정하고 본문만 스크롤되도록 UI 처리가 용이합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 12: 02-4 표 만들기 (5) -->
+<div class="slide-container" id="slide12">
+    <h2 class="slide-title">02-4. 표를 만드는 태그 (5) <span>&lt;col&gt;, &lt;colgroup&gt;</span></h2>
+    <div class="content-area">
+        <div class="code-layout">
+            <div class="code-box">
+                <div class="line">&lt;<span class="tag">table</span> <span class="attr">border</span>=<span class="val">"1"</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">caption</span>&gt;</div>
+                <div class="line indent-2">colgroup 연습</div>
+                <div class="line indent-1">&lt;/<span class="tag">caption</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">colgroup</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">col</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">col</span> <span class="attr">span</span>=<span class="val">"2"</span> <span class="attr">style</span>=<span class="val">"background-color:blue;"</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">col</span> <span class="attr">style</span>=<span class="val">"background-color:yellow"</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">colgroup</span>&gt;</div>
+                <div class="line indent-1">&lt;<span class="tag">tr</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">td</span>&gt;</div>
+                <div class="line indent-3">데이터1</div>
+                <div class="line indent-2">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">td</span>&gt;</div>
+                <div class="line indent-3">데이터2</div>
+                <div class="line indent-2">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">td</span>&gt;</div>
+                <div class="line indent-3">데이터3</div>
+                <div class="line indent-2">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-2">&lt;<span class="tag">td</span>&gt;</div>
+                <div class="line indent-3">데이터4</div>
+                <div class="line indent-2">&lt;/<span class="tag">td</span>&gt;</div>
+                <div class="line indent-1">&lt;/<span class="tag">tr</span>&gt;</div>
+                <div class="line">&lt;/<span class="tag">table</span>&gt;</div>
+            </div>
+            <div class="text-column">
+                <div class="text-box">
+                    <h3><i class="fa-solid fa-table-columns"></i> 열 단위 스타일 일괄 지정</h3>
+                    <ul class="bullet-list">
+                        <li><strong>&lt;col&gt;:</strong> 한 열의 모든 셀에 같은 스타일을 적용할 때 사용합니다. (닫는 태그 없음)</li>
+                        <li><strong>span 속성:</strong> <code>&lt;col span="2"&gt;</code>처럼 여러 열을 하나로 묶어 처리.</li>
+                        <li><strong>&lt;colgroup&gt;:</strong> 여러 개의 <code>&lt;col&gt;</code> 태그를 그룹으로 묶습니다.</li>
+                        <li><strong>주의:</strong> 반드시 <code>&lt;caption&gt;</code> 뒤에 위치해야 하며, <code>&lt;tr&gt;</code>이나 <code>&lt;td&gt;</code>보다 먼저 작성해야 합니다. 선언된 열의 총개수(span 포함)가 표의 열 개수와 일치해야 합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+```

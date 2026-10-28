@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트 함수 종합 실습</title>
+    <style>
+        #copyBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #copyBtn:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+
+    <button id="copyBtn" onclick="copyCode()">코드 복사하기</button>
+
+    <script id="practice-code">
+        var count = 0; // 함수 실행 횟수를 저장할 count를 전역변수로 저장
+
+        initSystem(); //매시지(함수 호출)
+
+        function initSystem() {// 외부 함수
+            count++; // 함수 실행 회수
+            document.write("<h3>--- 시스템 접속 횟수: " + count + " ---</h3>");
+
+            function User(id, point) {// 내부 함수
+                this.userId = id; //this: 내부 함수 변수 지정? 메게변수를 userId에 저장
+                this.userPoint = point; // 메게변수 point를 userPoint에 저장
+                this.displayInfo = function() { //익명 함수 실행 때 저장할 함수고 displayInfo는 참조변수
+                    return "사용자: " + this.userId + " (현재 포인트: " + this.userPoint + ")"; //displayInfo를 함수형으로 호출 했을때 반환받을 return값
+                };
+            }
+
+            var inputId = prompt("아이디를 입력하세요.", "guest");// 아이디를 inputId에 저장 전역변수
+            var newUser = new User(inputId, 1000);// User객체 생성 초기값은 (안에 매게변수로 지정)
+            
+            document.write(newUser.displayInfo() + "<br>");//newUser안에 있는 객체 User의 함수호출 하고 줄바꿈 
+
+            var addValue = prompt("추가할 포인트를 입력하세요.", "0");//추가 포인트 입력받기 전역 변수
+
+            if (isNaN(addValue)) {//유효성 검사 숫자가 아니냐 아니라면 true
+                alert("숫자만 입력 가능합니다.");
+            } else {//숫자라면 else구문 
+                var pointAmount = parseInt(addValue); //정수형으로 변환 왜냐면 키보드로 입력받은 값은 문자이기 떄문 그리고 전역변수에 리턴값 저장
+                
+                document.write("포인트 적립 시작... ");
+                startTimer(3);//메시지 함수 호출
+
+                var finalPoint = calculatePoint(newUser.userPoint, pointAmount); //변수에 함수 리턴값 저장
+                document.write("<br><strong>최종 포인트: " + finalPoint + "</strong>");
+            }
+        }
+
+        function calculatePoint(current, add) {//console에 표시하고 리턴값으로 메게변수를 더한 값 반환 추가할 포인트랑 UserPoint 더함 값
+            var processMsg = "계산 중..."; 
+            console.log(processMsg);
+            return current + add;
+        }
+
+        function startTimer(n) { //재귀함수로 시자 카운트
+            if (n == 0) {
+                document.write(" 완료!");
+                return; 
+            }
+            document.write(n + " ");
+            startTimer(n - 1);
+        }
+
+        function copyCode() {//코드 복사 함수
+            const code = document.getElementById('practice-code').innerText;//javascript 안에 있는 text를 code에 대입 인데 const는 모르겠음
+            navigator.clipboard.writeText(code).then(() => {//navigator.clipboard에 code를 출력 하고 복사되었다고 상태창 출력
+                alert("코드가 클립보드에 복사되었습니다!");
+            });
+        }
+    </script>
+</body>
+</html>
