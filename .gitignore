@@ -4,3 +4,6 @@
 *.zip
 *.iso
 *.dmg
+*.cab
+*.venu
+echo "02_데이터베이스 및 SQL_1105/OracleXE213_Win64/"
