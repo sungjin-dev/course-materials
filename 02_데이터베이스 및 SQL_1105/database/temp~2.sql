@@ -329,6 +329,8 @@ SELECT CONCAT (EMPNO, ENAME),
         TO_CHAR(SYSDATE, 'HH:MI:SS P.M.') AS HHMISS_PM
         FROM DUAL;
         
+    SELECT TO_NUMBER('1,300', '999,999') - TO_NUMBER('1,500', '999,999') FROM DUAL;
+        
         
     
    
