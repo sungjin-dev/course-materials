@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streamlit 실습 과제: 올인원 미니 POS &amp; 매출 분석기</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --accent-bg: #eff6ff;
+      --code-bg: #f1f5f9;
+      --ok-bg: #ecfdf5;
+      --ok-border: #10b981;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.6rem;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+    }
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 28px;
+      margin-bottom: 18px;
+    }
+    h2 {
+      margin: 0 0 12px 0;
+      font-size: 1.2rem;
+      border-bottom: 2px solid var(--accent-bg);
+      padding-bottom: 6px;
+    }
+    h3 {
+      margin: 16px 0 6px 0;
+      font-size: 1.02rem;
+      color: var(--accent);
+    }
+    ul, ol {
+      margin: 6px 0 12px 0;
+      padding-left: 22px;
+    }
+    li { margin-bottom: 6px; }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 0.94rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: var(--accent-bg); }
+    .verify-box {
+      background: var(--ok-bg);
+      border: 1px solid var(--ok-border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>실습 문제: 올인원 미니 POS &amp; 매출 분석기 (<code>app.py</code>)</h1>
+      <p class="subtitle">기존 <code>common.py</code>(<code>parse_sales</code>, <code>summarize</code>)를 활용하여 Streamlit 기반 통합 웹 앱을 구현하고 배포한 후 url 올려주세요.</p>
+    </header>
+
+    <section>
+      <h2>1. 기본 환경 및 모듈 임포트</h2>
+      <ul>
+        <li>파일명은 <code>posapp.py</code>로 작성하며, 같은 프로젝트 구조에서 <code>data/sales.csv</code> 경로를 참조할 수 있도록 <code>pathlib.Path</code>를 사용합니다.</li>
+        <li><code>pandas</code>를 <code>pd</code>로, <code>streamlit</code>을 <code>st</code>로 임포트하고, <code>common</code> 모듈에서 <code>parse_sales</code>와 <code>summarize</code>를 가져옵니다.</li>
+        <li>페이지 설정은 <code>page_title="미니 POS &amp; 매출 대시보드"</code>, <code>layout="wide"</code>로 지정합니다.</li>
+        <li>상단 제목은 <code>"🏪올인원 미니 POS &amp; 매출 분석기"</code>, 본문 설명은 <code>"**학습 목표**: 입력(`form`), 상태 유지(`session_state`), 캐싱(`cache_data`), 데이터 시각화를 하나로 통합합니다."</code>로 출력합니다.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2. 세션 상태 및 캐싱 함수</h2>
+      <ul>
+        <li><code>st.session_state</code>에 <code>"pos_orders"</code>가 없으면 빈 리스트 <code>[]</code>로 초기화합니다.</li>
+        <li><code>st.session_state</code>에 <code>"messages"</code>가 없으면 초기 안내 메시지 1개를 담은 리스트로 초기화합니다:<br />
+          <code>[{"role": "assistant", "content": "안녕하세요! '총매출', '인기상품', '주문건수' 등을 물어보세요."}]</code></li>
+        <li><code>@st.cache_data(ttl=60)</code> 데코레이터를 적용한 <code>get_cached_summary(rows)</code> 함수를 정의하고 내부에서 <code>summarize(rows)</code>를 반환합니다.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. 사이드바 데이터 로드 및 초기화</h2>
+      <ul>
+        <li>사이드바 헤더로 <code>st.sidebar.header("⚙️ 데이터 관리")</code>를 표시합니다.</li>
+        <li><code>st.sidebar.file_uploader("추가 매출 CSV 업로드 (UTF-8)", type=["csv"])</code>로 <code>uploaded</code>를 받습니다.</li>
+        <li><code>"요약 캐시 초기화"</code> 버튼 클릭 시 <code>get_cached_summary.clear()</code>를 호출하고 <code>st.sidebar.success("캐시를 초기화했습니다.")</code>를 출력합니다.</li>
+        <li><code>"POS 입력 내역 초기화"</code> 버튼 클릭 시 <code>st.session_state.pos_orders = []</code>로 비우고 <code>st.sidebar.warning("현장 주문 내역이 초기화되었습니다.")</code>를 출력합니다.</li>
+        <li><code>base_rows</code> 생성 규칙:
+          <ol>
+            <li><code>uploaded</code>가 있으면 <code>parse_sales(uploaded.getvalue())</code>를 호출해 <code>base_rows</code>에 저장하고 <code>st.sidebar.success(f"CSV에서 {len(base_rows)}행을 불러왔습니다.")</code>를 출력합니다. <code>ValueError</code> 발생 시 <code>st.sidebar.error(str(exc))</code>를 출력합니다.</li>
+            <li><code>uploaded</code>가 없으면 <code>Path(__file__).resolve().parent / "data" / "sales.csv"</code> 경로를 확인합니다. 파일이 존재하면 <code>parse_sales(sample_path.read_bytes())</code>로 읽고, 없으면 기본값 <code>[{"product": "book", "quantity": 2, "price": 12000}, {"product": "pen", "quantity": 5, "price": 1500}]</code>을 사용합니다.</li>
+          </ol>
+        </li>
+        <li>최종 데이터는 <code>all_rows = base_rows + st.session_state.pos_orders</code>로 합칩니다.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. 메인 3개 탭 구현 요구사항</h2>
+      <p><code>st.tabs(["📊 매출 대시보드", "💳 POS 주문 입력", "💬 매출 도우미 챗봇"])</code>으로 <code>tab1</code>, <code>tab2</code>, <code>tab3</code>을 생성합니다.</p>
+
+      <h3>탭 1: <code>📊 매출 대시보드</code></h3>
+      <ul>
+        <li>상품 선택 셀렉트박스: 라벨 <code>"조회할 상품 선택"</code>, 선택지 <code>["전체"] + sorted({row["product"] for row in all_rows})</code>.</li>
+        <li><code>"전체"</code> 선택 시 <code>all_rows</code>, 특정 상품 선택 시 <code>[r for r in all_rows if r["product"] == selected]</code>로 <code>filtered</code>를 만들고 <code>summary = get_cached_summary(filtered)</code>를 계산합니다.</li>
+        <li>3열(<code>st.columns(3)</code>) 메트릭 출력:
+          <ul>
+            <li><code>col1.metric("총매출", f"{summary['revenue']:,}원")</code></li>
+            <li><code>col2.metric("총 판매 수량", f"{summary['quantity']:,}개")</code></li>
+            <li><code>col3.metric("거래 건수", f"{len(filtered)}건")</code></li>
+          </ul>
+        </li>
+        <li>하단 2열(<code>st.columns([1.2, 1])</code>):
+          <ul>
+            <li>왼쪽(<code>left</code>): 서브헤더 <code>"상세 거래 내역"</code>. <code>filtered</code>가 있으면 <code>df = pd.DataFrame(filtered)</code>에 <code>df["subtotal"] = df["quantity"] * df["price"]</code>를 추가한 뒤 <code>st.dataframe(df, use_container_width=True, hide_index=True)</code>로 출력하고, 비어 있으면 <code>st.info("표시할 데이터가 없습니다.")</code>를 출력합니다.</li>
+            <li>오른쪽(<code>right</code>): 서브헤더 <code>"상품별 매출 비중"</code>. <code>summary["by_product"]</code>가 참일 때 <code>st.bar_chart(summary["by_product"])</code>를 출력합니다.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>탭 2: <code>💳 POS 주문 입력</code></h3>
+      <ul>
+        <li>서브헤더 <code>"신규 현장 주문 등록"</code> 아래에 <code>st.form("pos_form", clear_on_submit=True)</code> 폼을 구성합니다.</li>
+        <li>입력 위젯:
+          <ul>
+            <li><code>p_name = st.text_input("상품명 (1~40자)")</code></li>
+            <li><code>c1, c2 = st.columns(2)</code> 내부에 <code>p_qty = c1.number_input("수량", min_value=1, max_value=1000, value=1)</code> 및 <code>p_price = c2.number_input("단가 (원)", min_value=100, max_value=1_000_000, value=5000, step=500)</code></li>
+            <li>제출 버튼: <code>submitted = st.form_submit_button("주문 추가")</code></li>
+          </ul>
+        </li>
+        <li>제출 시 <code>clean_name = p_name.strip()</code>을 검증합니다. <code>not clean_name or len(clean_name) &gt; 40</code>이면 <code>st.error("상품명은 공백 제외 1~40글자로 입력하세요.")</code>를 출력하고, 유효하면 <code>st.session_state.pos_orders</code>에 <code>{"product": clean_name, "quantity": int(p_qty), "price": int(p_price)}</code>를 추가한 뒤 <code>st.success(f"'{clean_name}' {p_qty}개 (총 {p_qty * p_price:,}원) 주문이 등록되었습니다! 대시보드 탭에서 확인하세요.")</code>를 출력합니다.</li>
+      </ul>
+
+      <h3>탭 3: <code>💬 매출 도우미 챗봇</code></h3>
+      <ul>
+        <li>서브헤더 <code>"데이터 기반 간단 Q&amp;A"</code> 아래에 <code>st.session_state.messages</code>의 각 메시지를 <code>st.chat_message(msg["role"])</code>과 <code>st.write(msg["content"])</code>로 렌더링합니다.</li>
+        <li><code>st.chat_input("매출에 대해 질문해보세요 (예: 총매출 알려줘, 가장 잘 팔린 상품은?)")</code>으로 입력을 받으면 사용자 메시지를 <code>st.session_state.messages</code>에 추가하고 화면에 표시합니다.</li>
+        <li><code>total_summary = get_cached_summary(all_rows)</code> 기준으로 응답 문자열 <code>reply</code>를 생성합니다:
+          <ul>
+            <li><code>"총매출" in prompt or "매출" in prompt</code>: <code>f"현재 누적 총매출은 **{total_summary['revenue']:,}원**입니다."</code></li>
+            <li><code>"인기" in prompt or "가장" in prompt or "상품" in prompt</code>: <code>total_summary["by_product"]</code>가 있으면 <code>best = max(total_summary["by_product"].items(), key=lambda x: x[1])</code>로 <code>f"매출 1위 상품은 **{best[0]}**이며, 총 **{best[1]:,}원**의 매출을 기록했습니다."</code>, 없으면 <code>"아직 등록된 상품 데이터가 없습니다."</code></li>
+            <li><code>"수량" in prompt or "건수" in prompt</code>: <code>f"총 거래 건수는 **{len(all_rows)}건**, 총 판매 수량은 **{total_summary['quantity']:,}개**입니다."</code></li>
+            <li>그 외: <code>"질문을 이해하지 못했습니다. **'총매출'**, **'인기 상품'**, **'판매 수량'** 키워드를 포함해 질문해 주세요!"</code></li>
+          </ul>
+        </li>
+        <li><code>reply</code>를 <code>st.session_state.messages</code>에 <code>"assistant"</code> 역할로 추가하고 <code>st.chat_message("assistant")</code>로 출력합니다.</li>
+      </ul>
+    </section>
+
+   
+        </tbody>
+      </table>
+    </section>
+  </div>
+</body>
+</html>
